@@ -8,6 +8,7 @@ function PWABadge() {
   const period = 0;
 
   const {
+    offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
@@ -26,14 +27,13 @@ function PWABadge() {
 
   function close() {
     // don't remove the typeof check: check https://github.com/vite-pwa/vite-plugin-pwa/issues/712
-    typeof setOfflineReady === "function" &&
-      typeof setNeedRefresh === "function" &&
-      setNeedRefresh(false);
+    typeof setOfflineReady === "function" && setOfflineReady(false);
+    typeof setNeedRefresh === "function" && setNeedRefresh(false);
   }
 
   return (
     <div className="PWABadge" role="alert" aria-labelledby="toast-message">
-      {needRefresh && (
+      {(offlineReady || needRefresh) && (
         <div className="PWABadge-toast">
           <div className="PWABadge-message">
             <span id="toast-message">

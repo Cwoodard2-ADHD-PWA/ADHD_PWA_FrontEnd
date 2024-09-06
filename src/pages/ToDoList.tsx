@@ -23,12 +23,14 @@ function ToDoList() {
 
   function addTask() {
     setTodos(
-      todos.concat({ task: newTask, deadline: newDeadline, subTasks: [] })
+      todos.concat({ task: newTask, deadline: newDeadline, subTasks: [] }),
     );
     setNewTask("");
   }
 
-  function finishTask(task: any) {
+  function editTask() {}
+
+  function completeTask(task: any) {
     console.log(task);
     const newList = todos.filter((todo: any) => todo !== task);
     console.log(newList);
@@ -58,7 +60,8 @@ function ToDoList() {
             <li key={key}>
               <p>{todo.task}</p>
               <p>{todo.deadline}</p>
-              <button onClick={() => finishTask(todo)}>Complete</button>
+              <button onClick={() => editTask()}>Complete</button>
+              <button onClick={() => completeTask(todo)}>Complete</button>
             </li>
           ))}
         </ul>

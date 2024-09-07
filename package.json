@@ -12,14 +12,18 @@
     "bd": "npm run build && firebase deploy"
   },
   "dependencies": {
-    "preact": "^10.21.0"
+    "preact": "^10.21.0",
+    "preact-iso": "^2.6.3"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.2",
     "@vite-pwa/assets-generator": "^0.2.6",
+    "autoprefixer": "^10.4.20",
     "husky": "^9.1.5",
     "lint-staged": "^15.2.10",
+    "postcss": "^8.4.45",
     "prettier": "3.3.3",
+    "tailwindcss": "^3.4.10",
     "typescript": "^5.2.2",
     "vite": "^5.2.10",
     "vite-plugin-pwa": "^0.20.5",

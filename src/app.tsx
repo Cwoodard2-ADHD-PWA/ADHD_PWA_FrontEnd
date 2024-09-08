@@ -4,7 +4,6 @@
 import { LocationProvider, Route, Router } from "preact-iso";
 import Homepage from "./pages/home-page.tsx";
 import ToDoList from "./pages/todo-list.tsx";
-import PWABadge from "./PWABadge.tsx";
 import "./app.css";
 
 export function App() {

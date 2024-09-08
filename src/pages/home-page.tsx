@@ -1,13 +1,12 @@
-import Navigation from "../components/Navigation";
+import DefaultPage from "../components/DefaultPage";
 import PWABadge from "../PWABadge";
 export default function Homepage() {
   return (
     <>
-      <div class="flex flex-row ">
-        <Navigation />
+      <DefaultPage>
         <h1>Hello Cameron</h1>
         <PWABadge />
-      </div>
+      </DefaultPage>
     </>
   );
 }

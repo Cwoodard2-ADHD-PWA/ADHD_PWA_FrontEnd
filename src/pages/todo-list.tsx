@@ -1,5 +1,8 @@
-import { useState, useRef } from "preact/hooks";
+import { useState } from "preact/hooks";
 import DefaultPage from "../components/DefaultPage";
+import TodoListItem from "../components/todo-list-components/TodoListItem";
+import ItemEditForm from "../components/todo-list-components/ItemEditForm";
+import ItemAddForm from "../components/todo-list-components/ItemAddForm copy";
 
 function ToDoList() {
   interface todoList {
@@ -17,8 +20,6 @@ function ToDoList() {
   const [addingTask, setAddingTask] = useState<boolean>(false);
   const [itemEdit, setItemEdit] = useState<string>("");
 
-  const taskRef = useRef<any>("");
-
   function changeTask(e: any) {
     setNewTask(e.target.value);
   }
@@ -31,7 +32,8 @@ function ToDoList() {
     setNewTime(e.target.value);
   }
 
-  function addTask() {
+  function addTask(e: any) {
+    e.preventDefault();
     setTodos(
       todos.concat({
         task: newTask,
@@ -47,20 +49,33 @@ function ToDoList() {
     setAddingTask(false);
   }
 
-  function editTask(event: any, todo: todoList) {
+  function enableEditing(todo: todoList) {
+    setNewTask(todo.task);
+    setDeadline(todo.deadline);
+    setNewTime(todo.time);
+    setItemEdit(todo.task);
+  }
+
+  function saveEdits(event: any, todo: todoList) {
     event.preventDefault();
+    console.log(todo);
     let objectIndex: any = todos.indexOf(todo);
+    console.log(objectIndex);
     let todoArray: any = todos;
     console.log(todoArray);
     todoArray[objectIndex] = {
-      task: taskRef.current.value,
-      deadline: event.target.deadline.value,
-      time: event.target.time.value,
+      task: newTask,
+      deadline: newDeadline,
+      time: newTime,
       progress: "",
       subTasks: [],
     };
     console.log(todoArray);
     setTodos(todoArray);
+    setNewTask("");
+    setDeadline("");
+    setNewTime("");
+    setItemEdit("");
     setItemEdit("");
   }
 
@@ -72,75 +87,42 @@ function ToDoList() {
   return (
     <>
       <DefaultPage>
-        <div>
+        <div class="flex flex-col">
+          <h1>Today</h1>
           <ul>
             {todos.map((todo: any, index: number) => (
               <li key={index} class="bg-gray-200">
                 {itemEdit === todo.task ? (
-                  <form onSubmit={(e) => editTask(e, todo)}>
-                    <input
-                      type={"text"}
-                      name="task"
-                      id="task"
-                      // value={todo.task}
-                      // onChange={(e: any) => changeTask(e)}
-                      placeholder="Add a New Task"
-                      ref={taskRef}
-                    ></input>
-                    <input
-                      type={"date"}
-                      name="deadline"
-                      id="deadline"
-                      value={todo.deadline}
-                      onChange={(e: any) => changeDeadline(e)}
-                    ></input>
-                    <input
-                      type="time"
-                      min="00:00"
-                      max="23:00"
-                      name="time"
-                      id="time"
-                      value={todo.time}
-                      onChange={(e: any) => changeTime(e)}
-                    ></input>
-                    <button type="submit">Save Changes</button>
-                  </form>
+                  <ItemEditForm
+                    saveEdits={saveEdits}
+                    newTask={newTask}
+                    newDeadline={newDeadline}
+                    newTime={newTime}
+                    changeTask={changeTask}
+                    changeDeadline={changeDeadline}
+                    changeTime={changeTime}
+                    todo={todo}
+                  />
                 ) : (
-                  <div class="flex flex-row">
-                    <button onClick={() => completeTask(todo)}>Complete</button>
-                    <p>{todo.task}</p>
-                    <p>{todo.deadline}</p>
-                    <p>{todo.time}</p>
-                    <button onClick={() => setItemEdit(todo.task)}>Edit</button>
-                  </div>
+                  <TodoListItem
+                    todo={todo}
+                    completeTask={completeTask}
+                    enableEditing={enableEditing}
+                  />
                 )}
               </li>
             ))}
           </ul>
           {addingTask && (
-            <div>
-              <input
-                type={"text"}
-                name="task"
-                value={newTask}
-                onChange={(e: any) => changeTask(e)}
-                placeholder="Add a New Task"
-              ></input>
-              <input
-                type={"date"}
-                name="deadline"
-                value={newDeadline}
-                onChange={(e: any) => changeDeadline(e)}
-              ></input>
-              <input
-                type="time"
-                min="00:00"
-                max="23:00"
-                name="time"
-                onChange={(e: any) => changeTime(e)}
-              ></input>
-              <button onClick={() => addTask()}>Add</button>
-            </div>
+            <ItemAddForm
+              addTask={addTask}
+              newTask={newTask}
+              newDeadline={newDeadline}
+              newTime={newTime}
+              changeTask={changeTask}
+              changeDeadline={changeDeadline}
+              changeTime={changeTime}
+            />
           )}
           <button onClick={() => setAddingTask(!addingTask)}>
             {addingTask ? "Close" : "Add Task"}

@@ -87,10 +87,10 @@ function ToDoList() {
   return (
     <>
       <DefaultPage>
-        <div class="flex flex-col w-full items-start m-10">
+        <div class="flex flex-col w-full items-start m-10 md:max-h-screen">
           <h1>Today</h1>
           <p>{date.toString().slice(0, 15)}</p>
-          <ul class="flex flex-col gap-3">
+          <ul class="flex flex-col gap-3 max-h-[550px] overflow-auto">
             {todos.map((todo: any, index: number) => (
               <li key={index}>
                 {itemEdit === todo.task ? (

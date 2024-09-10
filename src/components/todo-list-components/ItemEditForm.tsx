@@ -8,6 +8,7 @@ export default function ItemEditForm(props: any) {
         <label for="task">Task</label>
         <br></br>
         <input
+          required
           type={"text"}
           name="task"
           id="task"

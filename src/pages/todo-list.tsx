@@ -2,7 +2,7 @@ import { useState } from "preact/hooks";
 import DefaultPage from "../components/DefaultPage";
 import TodoListItem from "../components/todo-list-components/TodoListItem";
 import ItemEditForm from "../components/todo-list-components/ItemEditForm";
-import ItemAddForm from "../components/todo-list-components/ItemAddForm copy";
+import ItemAddForm from "../components/todo-list-components/ItemAddForm";
 
 function ToDoList() {
   interface todoList {
@@ -12,6 +12,9 @@ function ToDoList() {
     progress: string;
     subTasks: string[];
   }
+
+  const date = new Date();
+  console.log(date);
 
   const [todos, setTodos] = useState<todoList[]>([]);
   const [newTask, setNewTask] = useState<string>("");
@@ -58,11 +61,9 @@ function ToDoList() {
 
   function saveEdits(event: any, todo: todoList) {
     event.preventDefault();
-    console.log(todo);
     let objectIndex: any = todos.indexOf(todo);
     console.log(objectIndex);
     let todoArray: any = todos;
-    console.log(todoArray);
     todoArray[objectIndex] = {
       task: newTask,
       deadline: newDeadline,
@@ -70,7 +71,6 @@ function ToDoList() {
       progress: "",
       subTasks: [],
     };
-    console.log(todoArray);
     setTodos(todoArray);
     setNewTask("");
     setDeadline("");
@@ -87,11 +87,12 @@ function ToDoList() {
   return (
     <>
       <DefaultPage>
-        <div class="flex flex-col">
+        <div class="flex flex-col w-full items-start m-10">
           <h1>Today</h1>
-          <ul>
+          <p>{date.toString().slice(0, 15)}</p>
+          <ul class="flex flex-col gap-3">
             {todos.map((todo: any, index: number) => (
-              <li key={index} class="bg-gray-200">
+              <li key={index}>
                 {itemEdit === todo.task ? (
                   <ItemEditForm
                     saveEdits={saveEdits}
@@ -113,20 +114,25 @@ function ToDoList() {
               </li>
             ))}
           </ul>
-          {addingTask && (
-            <ItemAddForm
-              addTask={addTask}
-              newTask={newTask}
-              newDeadline={newDeadline}
-              newTime={newTime}
-              changeTask={changeTask}
-              changeDeadline={changeDeadline}
-              changeTime={changeTime}
-            />
-          )}
-          <button onClick={() => setAddingTask(!addingTask)}>
-            {addingTask ? "Close" : "Add Task"}
-          </button>
+          <div class="relative mt-auto">
+            {addingTask && (
+              <ItemAddForm
+                addTask={addTask}
+                newTask={newTask}
+                newDeadline={newDeadline}
+                newTime={newTime}
+                changeTask={changeTask}
+                changeDeadline={changeDeadline}
+                changeTime={changeTime}
+              />
+            )}
+            <button
+              onClick={() => setAddingTask(!addingTask)}
+              class="rounded-3xl bg-gray-200 py-2 px-4"
+            >
+              {addingTask ? "Close" : "Add Task"}
+            </button>
+          </div>
         </div>
       </DefaultPage>
     </>

@@ -1,8 +1,8 @@
-export default function ItemEditForm(props: any) {
+export default function ItemAddForm(props: any) {
   return (
     <form
-      onSubmit={(e) => props.saveEdits(e, props.todo)}
-      class="flex flex-col gap-5"
+      onSubmit={(e) => props.addTask(e)}
+      class="flex flex-col gap-5 bg-gray-100 p-4 absolute bottom-[60px] z-10 shadow-md"
     >
       <div>
         <label for="task">Task</label>
@@ -12,6 +12,8 @@ export default function ItemEditForm(props: any) {
           name="task"
           id="task"
           value={props.newTask}
+          // Need to figure out why TS doesn't like this maxLength
+          // maxLength="30"
           onChange={(e: any) => props.changeTask(e)}
           placeholder="Add a New Task"
         ></input>
@@ -40,7 +42,7 @@ export default function ItemEditForm(props: any) {
           onChange={(e: any) => props.changeTime(e)}
         ></input>
       </div>
-      <button type="submit">Save Changes</button>
+      <button type="submit">Add Task</button>
     </form>
   );
 }

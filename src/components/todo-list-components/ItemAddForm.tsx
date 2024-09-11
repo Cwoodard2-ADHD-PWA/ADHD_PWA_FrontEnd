@@ -5,19 +5,24 @@ export default function ItemAddForm(props: any) {
       class="flex flex-col gap-5 bg-gray-100 p-4 absolute bottom-[60px] z-10 shadow-md"
     >
       <div>
-        <label for="task">Task</label>
-        <br></br>
-        <input
-          required
-          type={"text"}
-          name="task"
-          id="task"
-          value={props.newTask}
-          // Need to figure out why TS doesn't like this maxLength
-          // maxLength="30"
-          onChange={(e: any) => props.changeTask(e)}
-          placeholder="Add a New Task"
-        ></input>
+        <div class="flex flex-row bg-white gap-2 items-center">
+          <label for="task">Task</label>
+          <br></br>
+          <input
+            required
+            type={"text"}
+            name="task"
+            id="task"
+            class="p-1"
+            value={props.newTask}
+            // Need to figure out why TS doesn't like this maxLength
+            // maxLength="30"
+            onChange={(e: any) => props.changeTask(e)}
+            placeholder="Add a New Task"
+          ></input>
+          <p>{props.newTime}</p>
+          <p>{props.newDeadline}</p>
+        </div>
       </div>
       <div>
         <label for="deadline">Date</label>

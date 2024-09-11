@@ -22,6 +22,9 @@ function ToDoList() {
   const [newTime, setNewTime] = useState<string>("");
   const [addingTask, setAddingTask] = useState<boolean>(false);
   const [itemEdit, setItemEdit] = useState<string>("");
+  const [currentDate, setCurrentDate] = useState<any>(
+    date.toString().slice(0, 15),
+  );
 
   function changeTask(e: any) {
     setNewTask(e.target.value);
@@ -33,6 +36,12 @@ function ToDoList() {
 
   function changeTime(e: any) {
     setNewTime(e.target.value);
+  }
+
+  function changeDate(action: number) {
+    let date = new Date(currentDate);
+    date.setDate(date.getDate() + action);
+    setCurrentDate(date.toString().slice(0, 15));
   }
 
   function addTask(e: any) {
@@ -87,32 +96,57 @@ function ToDoList() {
   return (
     <>
       <DefaultPage>
-        <div class="flex flex-col sm:w-full items-start m-10 md:max-h-screen w-max-[800px]">
-          <h1>Today</h1>
-          <p>{date.toString().slice(0, 15)}</p>
-          <ul class="flex flex-col gap-3 max-h-[550px] overflow-auto">
-            {todos.map((todo: any, index: number) => (
-              <li key={index}>
-                {itemEdit === todo.task ? (
-                  <ItemEditForm
-                    saveEdits={saveEdits}
-                    newTask={newTask}
-                    newDeadline={newDeadline}
-                    newTime={newTime}
-                    changeTask={changeTask}
-                    changeDeadline={changeDeadline}
-                    changeTime={changeTime}
-                    todo={todo}
-                  />
-                ) : (
-                  <TodoListItem
-                    todo={todo}
-                    completeTask={completeTask}
-                    enableEditing={enableEditing}
-                  />
-                )}
-              </li>
-            ))}
+        <div class="flex flex-col sm:w-full mx-20 my-10 md:max-h-screen w-max-[800px] items-center gap-3">
+          <div class="flex flex-col md:flex-row gap-4 w-full self-start">
+            <h1>Hello Cameron</h1>
+            <div class="flex flex-row gap-2 items-center ml-auto">
+              <button
+                onClick={() => changeDate(-1)}
+                class="rounded-full px-2 bg-gray-100"
+              >
+                {" "}
+                -{" "}
+              </button>
+              <p>{currentDate}</p>
+              <button
+                onClick={() => changeDate(1)}
+                class="rounded-full px-2 bg-gray-100"
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto">
+            {todos.map((todo: any, index: number) => {
+              const date = new Date(currentDate);
+              const checkDate = `${date.getFullYear()}-${"0" + (date.getMonth() + 1)}-${date.getDate()}`;
+              const toShow = checkDate === todo.deadline;
+              return (
+                <>
+                  {(toShow || todo.deadline === "") && (
+                    <li key={index} class="flex flex-col md:flex-row gap-4">
+                      <TodoListItem
+                        todo={todo}
+                        completeTask={completeTask}
+                        enableEditing={enableEditing}
+                      />
+                      {itemEdit === todo.task && (
+                        <ItemEditForm
+                          saveEdits={saveEdits}
+                          newTask={newTask}
+                          newDeadline={newDeadline}
+                          newTime={newTime}
+                          changeTask={changeTask}
+                          changeDeadline={changeDeadline}
+                          changeTime={changeTime}
+                          todo={todo}
+                        />
+                      )}
+                    </li>
+                  )}
+                </>
+              );
+            })}
           </ul>
           <div class="relative mt-auto">
             {addingTask && (

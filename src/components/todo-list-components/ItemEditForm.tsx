@@ -2,7 +2,7 @@ export default function ItemEditForm(props: any) {
   return (
     <form
       onSubmit={(e) => props.saveEdits(e, props.todo)}
-      class="flex flex-col gap-5"
+      class="flex flex-col gap-5 bg-gray-100 p-4 z-10 absolute md:top-0 top-10 left-0 h-screen w-full md:w-auto md:h-auto md:relative shadow-md transition-all animate-bottom-slide"
     >
       <div>
         <label for="task">Task</label>

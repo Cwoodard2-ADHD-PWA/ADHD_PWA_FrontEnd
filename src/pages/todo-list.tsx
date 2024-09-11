@@ -16,6 +16,7 @@ function ToDoList() {
   const date = new Date();
   console.log(date);
 
+  // TODO: Convert all form states into one state
   const [todos, setTodos] = useState<todoList[]>([]);
   const [newTask, setNewTask] = useState<string>("");
   const [newDeadline, setDeadline] = useState<string>("");
@@ -46,15 +47,16 @@ function ToDoList() {
 
   function addTask(e: any) {
     e.preventDefault();
-    setTodos(
-      todos.concat({
+    setTodos((prev: any) => [
+      ...prev,
+      {
         task: newTask,
         deadline: newDeadline,
         time: newTime,
         progress: "",
         subTasks: [],
-      }),
-    );
+      },
+    ]);
     setNewTask("");
     setDeadline("");
     setNewTime("");

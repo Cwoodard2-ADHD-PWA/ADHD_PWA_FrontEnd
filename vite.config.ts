@@ -16,8 +16,8 @@ export default defineConfig({
       },
 
       manifest: {
-        name: "adhdApp",
-        short_name: "adhdApp",
+        name: "Space Out",
+        short_name: "Space Out",
         description:
           "This app contains feature to help someone with ADHD maintain a healthy lifestyle.",
         theme_color: "#ffffff",

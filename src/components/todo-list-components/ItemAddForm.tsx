@@ -15,8 +15,7 @@ export default function ItemAddForm(props: any) {
             id="task"
             class="p-1"
             value={props.newTask}
-            // Need to figure out why TS doesn't like this maxLength
-            // maxLength="30"
+            maxLength={30}
             onChange={(e: any) => props.changeTask(e)}
             placeholder="Add a New Task"
           ></input>
@@ -48,7 +47,9 @@ export default function ItemAddForm(props: any) {
           onChange={(e: any) => props.changeTime(e)}
         ></input>
       </div>
-      <button type="submit">Add Task</button>
+      <button type="submit" class="rounded-3xl bg-white py-2 px-4">
+        Add Task
+      </button>
     </form>
   );
 }

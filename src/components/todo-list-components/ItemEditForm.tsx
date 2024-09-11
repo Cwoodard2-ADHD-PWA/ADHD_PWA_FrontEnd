@@ -41,7 +41,9 @@ export default function ItemEditForm(props: any) {
           onChange={(e: any) => props.changeTime(e)}
         ></input>
       </div>
-      <button type="submit">Save Changes</button>
+      <button type="submit" class="rounded-3xl bg-white py-2 px-4">
+        Save Changes
+      </button>
     </form>
   );
 }

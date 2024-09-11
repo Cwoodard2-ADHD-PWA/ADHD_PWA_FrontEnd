@@ -87,7 +87,7 @@ function ToDoList() {
   return (
     <>
       <DefaultPage>
-        <div class="flex flex-col w-full items-start m-10 md:max-h-screen">
+        <div class="flex flex-col sm:w-full items-start m-10 md:max-h-screen w-max-[800px]">
           <h1>Today</h1>
           <p>{date.toString().slice(0, 15)}</p>
           <ul class="flex flex-col gap-3 max-h-[550px] overflow-auto">

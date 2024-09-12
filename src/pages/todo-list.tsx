@@ -1,10 +1,14 @@
 import { useState } from "preact/hooks";
-import DefaultPage from "../components/DefaultPage";
+import documentTitle from "../helper-functions/document-title";
+import DefaultPage from "../components/layout-components/DefaultPage";
 import TodoListItem from "../components/todo-list-components/TodoListItem";
 import ItemEditForm from "../components/todo-list-components/ItemEditForm";
 import ItemAddForm from "../components/todo-list-components/ItemAddForm";
+import GeneralPageWrapper from "../components/layout-components/GeneralPageWrapper";
 
 function ToDoList() {
+  documentTitle("Todo List");
+
   interface todoList {
     task: string;
     deadline: string;
@@ -18,6 +22,14 @@ function ToDoList() {
 
   // TODO: Convert all form states into one state
   const [todos, setTodos] = useState<todoList[]>([]);
+  const [currentTask, setCurrentTask] = useState<todoList>({
+    task: "",
+    deadline: "",
+    time: "",
+    progress: "",
+    subTasks: [],
+  });
+
   const [newTask, setNewTask] = useState<string>("");
   const [newDeadline, setDeadline] = useState<string>("");
   const [newTime, setNewTime] = useState<string>("");
@@ -26,6 +38,10 @@ function ToDoList() {
   const [currentDate, setCurrentDate] = useState<any>(
     date.toString().slice(0, 15),
   );
+
+  function handleChange(e: any) {
+    setCurrentTask({ ...currentTask, [e.target.name]: e.target.value });
+  }
 
   function changeTask(e: any) {
     setNewTask(e.target.value);
@@ -50,7 +66,7 @@ function ToDoList() {
     setTodos((prev: any) => [
       ...prev,
       {
-        task: newTask,
+        task: currentTask.task,
         deadline: newDeadline,
         time: newTime,
         progress: "",
@@ -98,7 +114,7 @@ function ToDoList() {
   return (
     <>
       <DefaultPage>
-        <div class="flex flex-col sm:w-full mx-20 my-10 md:max-h-screen w-max-[800px] items-center gap-3">
+        <GeneralPageWrapper>
           <div class="flex flex-col md:flex-row gap-4 w-full self-start">
             <h1>Hello Cameron</h1>
             <div class="flex flex-row gap-2 items-center ml-auto">
@@ -153,6 +169,7 @@ function ToDoList() {
           <div class="relative mt-auto">
             {addingTask && (
               <ItemAddForm
+                currentTask={currentTask}
                 addTask={addTask}
                 newTask={newTask}
                 newDeadline={newDeadline}
@@ -160,6 +177,7 @@ function ToDoList() {
                 changeTask={changeTask}
                 changeDeadline={changeDeadline}
                 changeTime={changeTime}
+                changeCurrentTask={handleChange}
               />
             )}
             <button
@@ -169,7 +187,7 @@ function ToDoList() {
               {addingTask ? "Close" : "Add Task"}
             </button>
           </div>
-        </div>
+        </GeneralPageWrapper>
       </DefaultPage>
     </>
   );

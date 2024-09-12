@@ -14,9 +14,9 @@ export default function ItemAddForm(props: any) {
             name="task"
             id="task"
             class="p-1"
-            value={props.newTask}
+            value={props.currentTask.task}
             maxLength={30}
-            onChange={(e: any) => props.changeTask(e)}
+            onChange={(e: any) => props.changeCurrentTask(e)}
             placeholder="Add a New Task"
           ></input>
           <p>{props.newTime}</p>

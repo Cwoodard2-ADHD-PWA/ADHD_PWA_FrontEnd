@@ -6,6 +6,7 @@ import Homepage from "./pages/home-page.tsx";
 import ToDoList from "./pages/todo-list.tsx";
 import register from "./pages/register.tsx";
 import login from "./pages/login.tsx";
+import WeeklyPlanner from "./pages/weekly-planner.tsx";
 import "./app.css";
 
 export function App() {
@@ -16,6 +17,7 @@ export function App() {
         <Route path="/register" component={register} />
         <Route path="/dashboard" component={Homepage} />
         <Route path="/todo-list" component={ToDoList} />
+        <Route path="/weekly-planner" component={WeeklyPlanner} />
       </Router>
     </LocationProvider>
   );

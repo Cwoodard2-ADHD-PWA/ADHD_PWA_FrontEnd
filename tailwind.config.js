@@ -10,9 +10,14 @@ export default {
           "0%": { transform: "translateX(-30px)", opacity: "0%" },
           100: { transform: "translateX(0px)", opacity: "100%" },
         },
+        slideFromBottom: {
+          "0%": { transform: "translateY(30px)", opacity: "0%" },
+          100: { transform: "translateX(0px)", opacity: "100%" },
+        },
       },
       animation: {
-        "left-slide": "slideFromLeft 0.5s linear",
+        "left-slide": "slideFromLeft 0.25s linear",
+        "bottom-slide": "slideFromBottom 0.25s linear",
       },
     },
   },

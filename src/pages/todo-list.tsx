@@ -86,6 +86,7 @@ function ToDoList() {
   }
 
   function enableEditing(todo: todoList) {
+    console.log("Was called");
     setCurrentTask({
       ...currentTask,
       task: todo.task,
@@ -95,7 +96,7 @@ function ToDoList() {
     // setNewTask(todo.task);
     // setDeadline(todo.deadline);
     // setNewTime(todo.time);
-    // setItemEdit(todo.task);
+    setItemEdit(todo.task);
   }
 
   function saveEdits(event: any, todo: todoList) {
@@ -128,7 +129,10 @@ function ToDoList() {
       <DefaultPage>
         <GeneralPageWrapper>
           <div class="flex flex-col md:flex-row gap-4 w-full self-start">
-            <h1>Hello Cameron</h1>
+            <div>
+              <h1>Hello Cameron</h1>
+              <p>{currentDate}</p>
+            </div>
             <div class="flex flex-row gap-2 items-center ml-auto">
               <button
                 onClick={() => changeDate(-1)}
@@ -150,6 +154,7 @@ function ToDoList() {
             {todos.map((todo: any, index: number) => {
               // TODO: Figure out best way to ensure these dates can easily be compared!
               // Maybe convert the stored date of a todo into a date and compare that way?
+              console.log(todo);
               const date = new Date(currentDate);
               const testingDate = new Date(todo.deadline);
               console.log(JSON.stringify(date));
@@ -176,6 +181,7 @@ function ToDoList() {
                         <ItemEditForm
                           currentTask={currentTask}
                           saveEdits={saveEdits}
+                          enableEditing={enableEditing}
                           // newTask={newTask}
                           // newDeadline={newDeadline}
                           // newTime={newTime}
@@ -193,7 +199,7 @@ function ToDoList() {
               );
             })}
           </ul>
-          <div class="relative mt-auto">
+          <div class="md:relative mt-auto">
             {addingTask && (
               <ItemAddForm
                 currentTask={currentTask}

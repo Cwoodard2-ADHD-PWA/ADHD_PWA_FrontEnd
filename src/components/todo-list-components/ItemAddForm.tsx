@@ -1,4 +1,5 @@
 // import { useEffect } from "preact/hooks";
+import monthConverter from "../../helper-functions/month-converter";
 /**
  *
  * @param props
@@ -25,14 +26,14 @@ export default function ItemAddForm(props: any) {
   return (
     <form
       onSubmit={(e) => props.addTask(e)}
-      class="flex flex-col gap-5 bg-gray-100 p-4 absolute bottom-[60px] z-10 shadow-md"
+      class="flex flex-col gap-5 bg-gray-100 p-4 absolute w-full md:w-auto left-0 top-10 h-screen md:h-auto md:bottom-[60px] z-10 shadow-md animate-bottom-slide"
       // onBlur={(e: any) => handleBlur(e)}
       // tabIndex={1}
       id="addForm"
     >
       <div>
-        <div class="flex flex-row bg-white gap-2 items-center">
-          <label for="task">Task</label>
+        <label for="task">Task</label>
+        <div class="flex flex-row bg-white gap-2 items-center p-1">
           <br></br>
           <input
             required
@@ -45,8 +46,14 @@ export default function ItemAddForm(props: any) {
             onChange={(e: any) => props.changeCurrentTask(e)}
             placeholder="Add a New Task"
           ></input>
-          <p>{props.currentTask.time}</p>
-          <p>{props.currentTask.deadline}</p>
+          <p class="rounded-md p-2 bg-gray-200">
+            {monthConverter(
+              props.currentTask.deadline.slice(5, 7),
+              props.currentTask.deadline.slice(8, 10),
+            )}
+          </p>
+          <p class="rounded-md p-2 bg-gray-200">{props.currentTask.time}</p>
+          {/* + " " + props.currentTask.deadline.slice(8,10)} */}
         </div>
       </div>
       <div>

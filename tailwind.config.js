@@ -6,13 +6,13 @@ export default {
   theme: {
     extend: {
       keyframes: {
-        slideFromBottom: {
-          "0%": { transform: "translateY(-30px)" },
-          100: { transform: "translateY(0px)" },
+        slideFromLeft: {
+          "0%": { transform: "translateX(-30px)", opacity: "0%" },
+          100: { transform: "translateX(0px)", opacity: "100%" },
         },
       },
       animation: {
-        "bottom-slide": "slideFromBottom 1s linear",
+        "left-slide": "slideFromLeft 0.5s linear",
       },
     },
   },

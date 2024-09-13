@@ -2,7 +2,7 @@ export default function ItemEditForm(props: any) {
   return (
     <form
       onSubmit={(e) => props.saveEdits(e, props.todo)}
-      class="flex flex-col gap-5 bg-gray-100 p-4 z-10 absolute md:top-0 top-10 left-0 h-screen w-full md:w-auto md:h-auto md:relative shadow-md transition-all animate-bottom-slide"
+      class="flex flex-col gap-5 bg-gray-100 p-4 z-10 absolute md:top-0 top-10 left-0 h-screen w-full md:w-auto md:h-auto md:relative shadow-md transition-all animate-left-slide"
     >
       <div>
         <label for="task">Task</label>
@@ -12,8 +12,8 @@ export default function ItemEditForm(props: any) {
           type={"text"}
           name="task"
           id="task"
-          value={props.newTask}
-          onChange={(e: any) => props.changeTask(e)}
+          value={props.currentTask.task}
+          onChange={(e: any) => props.changeCurrentTask(e)}
           placeholder="Add a New Task"
         ></input>
       </div>
@@ -24,8 +24,8 @@ export default function ItemEditForm(props: any) {
           type={"date"}
           name="deadline"
           id="deadline"
-          value={props.newDeadline}
-          onChange={(e: any) => props.changeDeadline(e)}
+          value={props.currentTask.deadline}
+          onChange={(e: any) => props.changeCurrentTask(e)}
         ></input>
       </div>
       <div>
@@ -37,8 +37,8 @@ export default function ItemEditForm(props: any) {
           max="23:00"
           name="time"
           id="time"
-          value={props.newTime}
-          onChange={(e: any) => props.changeTime(e)}
+          value={props.currentTask.time}
+          onChange={(e: any) => props.changeCurrentTask(e)}
         ></input>
       </div>
       <button type="submit" class="rounded-3xl bg-white py-2 px-4">

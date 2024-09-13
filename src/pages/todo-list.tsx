@@ -30,31 +30,39 @@ function ToDoList() {
     subTasks: [],
   });
 
-  const [newTask, setNewTask] = useState<string>("");
-  const [newDeadline, setDeadline] = useState<string>("");
-  const [newTime, setNewTime] = useState<string>("");
+  // const [newTask, setNewTask] = useState<string>("");
+  // const [newDeadline, setDeadline] = useState<string>("");
+  // const [newTime, setNewTime] = useState<string>("");
   const [addingTask, setAddingTask] = useState<boolean>(false);
   const [itemEdit, setItemEdit] = useState<string>("");
   const [currentDate, setCurrentDate] = useState<any>(
     date.toString().slice(0, 15),
   );
 
+  /**
+   *
+   * @param e
+   */
   function handleChange(e: any) {
     setCurrentTask({ ...currentTask, [e.target.name]: e.target.value });
   }
 
-  function changeTask(e: any) {
-    setNewTask(e.target.value);
-  }
+  // function changeTask(e: any) {
+  //   setNewTask(e.target.value);
+  // }
 
-  function changeDeadline(e: any) {
-    setDeadline(e.target.value);
-  }
+  // function changeDeadline(e: any) {
+  //   setDeadline(e.target.value);
+  // }
 
-  function changeTime(e: any) {
-    setNewTime(e.target.value);
-  }
+  // function changeTime(e: any) {
+  //   setNewTime(e.target.value);
+  // }
 
+  /**
+   *
+   * @param action
+   */
   function changeDate(action: number) {
     let date = new Date(currentDate);
     date.setDate(date.getDate() + action);
@@ -63,27 +71,31 @@ function ToDoList() {
 
   function addTask(e: any) {
     e.preventDefault();
-    setTodos((prev: any) => [
-      ...prev,
-      {
-        task: currentTask.task,
-        deadline: newDeadline,
-        time: newTime,
-        progress: "",
-        subTasks: [],
-      },
-    ]);
-    setNewTask("");
-    setDeadline("");
-    setNewTime("");
+    setTodos((prev: any) => [...prev, currentTask]);
+    // setNewTask("");
+    // setDeadline("");
+    // setNewTime("");
     setAddingTask(false);
+    setCurrentTask({
+      task: "",
+      deadline: "",
+      time: "",
+      progress: "",
+      subTasks: [],
+    });
   }
 
   function enableEditing(todo: todoList) {
-    setNewTask(todo.task);
-    setDeadline(todo.deadline);
-    setNewTime(todo.time);
-    setItemEdit(todo.task);
+    setCurrentTask({
+      ...currentTask,
+      task: todo.task,
+      deadline: todo.deadline,
+      time: todo.time,
+    });
+    // setNewTask(todo.task);
+    // setDeadline(todo.deadline);
+    // setNewTime(todo.time);
+    // setItemEdit(todo.task);
   }
 
   function saveEdits(event: any, todo: todoList) {
@@ -91,18 +103,18 @@ function ToDoList() {
     let objectIndex: any = todos.indexOf(todo);
     console.log(objectIndex);
     let todoArray: any = todos;
-    todoArray[objectIndex] = {
-      task: newTask,
-      deadline: newDeadline,
-      time: newTime,
+    todoArray[objectIndex] = currentTask;
+    setTodos(todoArray);
+    // setNewTask("");
+    // setDeadline("");
+    // setNewTime("");
+    setCurrentTask({
+      task: "",
+      deadline: "",
+      time: "",
       progress: "",
       subTasks: [],
-    };
-    setTodos(todoArray);
-    setNewTask("");
-    setDeadline("");
-    setNewTime("");
-    setItemEdit("");
+    });
     setItemEdit("");
   }
 
@@ -136,9 +148,21 @@ function ToDoList() {
           </div>
           <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto">
             {todos.map((todo: any, index: number) => {
+              // TODO: Figure out best way to ensure these dates can easily be compared!
+              // Maybe convert the stored date of a todo into a date and compare that way?
               const date = new Date(currentDate);
-              const checkDate = `${date.getFullYear()}-${"0" + (date.getMonth() + 1)}-${date.getDate()}`;
-              const toShow = checkDate === todo.deadline;
+              const testingDate = new Date(todo.deadline);
+              console.log(JSON.stringify(date));
+              console.log(JSON.stringify(testingDate));
+              console.log(JSON.stringify(date) == JSON.stringify(testingDate));
+              const checkDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+              console.log(
+                todo.deadline.slice(0, 5) + todo.deadline.slice(6, 15),
+              );
+              console.log(checkDate);
+              const toShow =
+                checkDate ===
+                todo.deadline.slice(0, 4) + todo.deadline.slice(6, 15);
               return (
                 <>
                   {(toShow || todo.deadline === "") && (
@@ -150,14 +174,17 @@ function ToDoList() {
                       />
                       {itemEdit === todo.task && (
                         <ItemEditForm
+                          currentTask={currentTask}
                           saveEdits={saveEdits}
-                          newTask={newTask}
-                          newDeadline={newDeadline}
-                          newTime={newTime}
-                          changeTask={changeTask}
-                          changeDeadline={changeDeadline}
-                          changeTime={changeTime}
+                          // newTask={newTask}
+                          // newDeadline={newDeadline}
+                          // newTime={newTime}
+                          // changeTask={changeTask}
+                          // changeDeadline={changeDeadline}
+                          // changeTime={changeTime}
                           todo={todo}
+                          changeCurrentTask={handleChange}
+                          setCurrentTask={setCurrentTask}
                         />
                       )}
                     </li>
@@ -171,13 +198,16 @@ function ToDoList() {
               <ItemAddForm
                 currentTask={currentTask}
                 addTask={addTask}
-                newTask={newTask}
-                newDeadline={newDeadline}
-                newTime={newTime}
-                changeTask={changeTask}
-                changeDeadline={changeDeadline}
-                changeTime={changeTime}
+                setAddingTask={setAddingTask}
+                // newTask={newTask}
+                // newDeadline={newDeadline}
+                // newTime={newTime}
+                // changeTask={changeTask}
+                // changeDeadline={changeDeadline}
+                // changeTime={changeTime}
                 changeCurrentTask={handleChange}
+                setCurrentTask={setCurrentTask}
+                addingTask={addingTask}
               />
             )}
             <button

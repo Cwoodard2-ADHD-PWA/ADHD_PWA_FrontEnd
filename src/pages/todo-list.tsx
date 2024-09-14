@@ -4,6 +4,7 @@ import DefaultPage from "../components/layout-components/DefaultPage";
 import TodoListItem from "../components/todo-list-components/TodoListItem";
 import ItemEditForm from "../components/todo-list-components/ItemEditForm";
 import ItemAddForm from "../components/todo-list-components/ItemAddForm";
+import RightSideBar from "../components/todo-list-components/RightSideBar";
 import GeneralPageWrapper from "../components/layout-components/GeneralPageWrapper";
 
 function ToDoList() {
@@ -11,9 +12,10 @@ function ToDoList() {
 
   interface todoList {
     task: string;
+    description: string;
     deadline: string;
     time: string;
-    progress: string;
+    complete: boolean;
     subTasks: string[];
   }
 
@@ -24,20 +26,30 @@ function ToDoList() {
   const [todos, setTodos] = useState<todoList[]>([]);
   const [currentTask, setCurrentTask] = useState<todoList>({
     task: "",
+    description: "",
     deadline: "",
     time: "",
-    progress: "",
+    complete: false,
     subTasks: [],
   });
 
-  // const [newTask, setNewTask] = useState<string>("");
-  // const [newDeadline, setDeadline] = useState<string>("");
-  // const [newTime, setNewTime] = useState<string>("");
+  const [progress, setProgress] = useState<number>(0);
   const [addingTask, setAddingTask] = useState<boolean>(false);
   const [itemEdit, setItemEdit] = useState<string>("");
   const [currentDate, setCurrentDate] = useState<any>(
     date.toString().slice(0, 15),
   );
+
+  function setDefaultTodoState() {
+    return {
+      task: "",
+      description: "",
+      deadline: "",
+      time: "",
+      complete: false,
+      subTasks: [],
+    };
+  }
 
   /**
    *
@@ -46,18 +58,6 @@ function ToDoList() {
   function handleChange(e: any) {
     setCurrentTask({ ...currentTask, [e.target.name]: e.target.value });
   }
-
-  // function changeTask(e: any) {
-  //   setNewTask(e.target.value);
-  // }
-
-  // function changeDeadline(e: any) {
-  //   setDeadline(e.target.value);
-  // }
-
-  // function changeTime(e: any) {
-  //   setNewTime(e.target.value);
-  // }
 
   /**
    *
@@ -71,31 +71,22 @@ function ToDoList() {
 
   function addTask(e: any) {
     e.preventDefault();
+
+    // TODO: Change the state such that the progress bar state is a counter of current complete items
+    // TODO: Additionally, add logic that that results in progress being set accordingly to the date it is on
+    console.log(todos);
     setTodos((prev: any) => [...prev, currentTask]);
-    // setNewTask("");
-    // setDeadline("");
-    // setNewTime("");
     setAddingTask(false);
-    setCurrentTask({
-      task: "",
-      deadline: "",
-      time: "",
-      progress: "",
-      subTasks: [],
-    });
+    setCurrentTask(setDefaultTodoState());
   }
 
   function enableEditing(todo: todoList) {
-    console.log("Was called");
     setCurrentTask({
       ...currentTask,
       task: todo.task,
       deadline: todo.deadline,
       time: todo.time,
     });
-    // setNewTask(todo.task);
-    // setDeadline(todo.deadline);
-    // setNewTime(todo.time);
     setItemEdit(todo.task);
   }
 
@@ -106,22 +97,17 @@ function ToDoList() {
     let todoArray: any = todos;
     todoArray[objectIndex] = currentTask;
     setTodos(todoArray);
-    // setNewTask("");
-    // setDeadline("");
-    // setNewTime("");
-    setCurrentTask({
-      task: "",
-      deadline: "",
-      time: "",
-      progress: "",
-      subTasks: [],
-    });
+    setCurrentTask(setDefaultTodoState());
     setItemEdit("");
   }
 
   function completeTask(task: any) {
-    const newList = todos.filter((todo: any) => todo !== task);
-    setTodos(newList);
+    setProgress((prev) => prev + 1);
+    setTodos(
+      todos.map((todo) =>
+        todo.task == task.task ? { ...task, complete: true } : todo,
+      ),
+    );
   }
 
   return (
@@ -134,7 +120,16 @@ function ToDoList() {
               <p>{currentDate}</p>
             </div>
             <div class="flex flex-row gap-2 items-center ml-auto">
-              <button
+              <progress
+                id="completion"
+                max="100"
+                value={((progress / todos.length) * 100).toString()}
+                class="rounded-lg bg-blue"
+              >
+                {((progress / todos.length) * 100).toString()}
+              </progress>
+              {todos.length > 0 && <p>{`${progress} of ${todos.length}`}</p>}
+              {/* <button
                 onClick={() => changeDate(-1)}
                 class="rounded-full px-2 bg-gray-100"
               >
@@ -147,27 +142,16 @@ function ToDoList() {
                 class="rounded-full px-2 bg-gray-100"
               >
                 +
-              </button>
+              </button> */}
             </div>
           </div>
           <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto">
             {todos.map((todo: any, index: number) => {
-              // TODO: Figure out best way to ensure these dates can easily be compared!
-              // Maybe convert the stored date of a todo into a date and compare that way?
-              console.log(todo);
               const date = new Date(currentDate);
               const testingDate = new Date(todo.deadline);
-              console.log(JSON.stringify(date));
-              console.log(JSON.stringify(testingDate));
-              console.log(JSON.stringify(date) == JSON.stringify(testingDate));
-              const checkDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-              console.log(
-                todo.deadline.slice(0, 5) + todo.deadline.slice(6, 15),
-              );
-              console.log(checkDate);
-              const toShow =
-                checkDate ===
-                todo.deadline.slice(0, 4) + todo.deadline.slice(6, 15);
+              const toShow: boolean =
+                JSON.stringify(date).slice(1, 11) ==
+                JSON.stringify(testingDate).slice(1, 11);
               return (
                 <>
                   {(toShow || todo.deadline === "") && (
@@ -182,12 +166,6 @@ function ToDoList() {
                           currentTask={currentTask}
                           saveEdits={saveEdits}
                           enableEditing={enableEditing}
-                          // newTask={newTask}
-                          // newDeadline={newDeadline}
-                          // newTime={newTime}
-                          // changeTask={changeTask}
-                          // changeDeadline={changeDeadline}
-                          // changeTime={changeTime}
                           todo={todo}
                           changeCurrentTask={handleChange}
                           setCurrentTask={setCurrentTask}
@@ -205,12 +183,6 @@ function ToDoList() {
                 currentTask={currentTask}
                 addTask={addTask}
                 setAddingTask={setAddingTask}
-                // newTask={newTask}
-                // newDeadline={newDeadline}
-                // newTime={newTime}
-                // changeTask={changeTask}
-                // changeDeadline={changeDeadline}
-                // changeTime={changeTime}
                 changeCurrentTask={handleChange}
                 setCurrentTask={setCurrentTask}
                 addingTask={addingTask}
@@ -224,6 +196,7 @@ function ToDoList() {
             </button>
           </div>
         </GeneralPageWrapper>
+        <RightSideBar />
       </DefaultPage>
     </>
   );

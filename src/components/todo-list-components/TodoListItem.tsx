@@ -3,6 +3,9 @@ export default function TodoListItem(props: any) {
     <>
       <div class="flex flex-row gap-2 min-w-80 max-w-lg p-1 border-2 border-gray-200 rounded-lg justify-items-center self-start">
         <div class="flex flex-row gap-3 items-center">
+          {/* <button class="rounded-full border-black border" onClick={() => props.completeTask(props.todo)}>
+                {props.todo.complete ? "✓" : "Complete"}
+            </button> */}
           <label for="complete" hidden></label>
           <input
             id="complete"

@@ -1,6 +1,3 @@
-import home from "../assets/navigation-images/Home-Icon.svg";
-import list from "../assets/navigation-images/List-Alt-Icon.svg";
-
 export default function Navigation() {
   return (
     <>

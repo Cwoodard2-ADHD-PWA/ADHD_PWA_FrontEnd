@@ -6,12 +6,14 @@ export default function TodoListItem(props: any) {
           {/* <button class="rounded-full border-black border" onClick={() => props.completeTask(props.todo)}>
                 {props.todo.complete ? "✓" : "Complete"}
             </button> */}
-          <label for="complete" hidden></label>
+          <label for="complete" hidden>
+            Complete
+          </label>
           <input
             id="complete"
             name="complete"
             type="checkbox"
-            onClick={() => props.completeTask(props.todo)}
+            onClick={(e) => props.completeTask(e, props.todo)}
           ></input>
           <p>{props.todo.task}</p>
         </div>

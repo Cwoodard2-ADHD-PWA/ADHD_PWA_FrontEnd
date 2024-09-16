@@ -63,11 +63,11 @@ function ToDoList() {
    *
    * @param action
    */
-  function changeDate(action: number) {
-    let date = new Date(currentDate);
-    date.setDate(date.getDate() + action);
-    setCurrentDate(date.toString().slice(0, 15));
-  }
+  // function changeDate(action: number) {
+  //   let date = new Date(currentDate);
+  //   date.setDate(date.getDate() + action);
+  //   setCurrentDate(date.toString().slice(0, 15));
+  // }
 
   function addTask(e: any) {
     e.preventDefault();
@@ -101,11 +101,16 @@ function ToDoList() {
     setItemEdit("");
   }
 
-  function completeTask(task: any) {
-    setProgress((prev) => prev + 1);
+  function completeTask(e: any, task: any) {
+    console.log(e.target.checked);
+    if (!e.target.checked) {
+      setProgress((prev) => prev - 1);
+    } else {
+      setProgress((prev) => prev + 1);
+    }
     setTodos(
       todos.map((todo) =>
-        todo.task == task.task ? { ...task, complete: true } : todo,
+        todo.task == task.task ? { ...task, complete: !todo.complete } : todo,
       ),
     );
   }
@@ -120,14 +125,21 @@ function ToDoList() {
               <p>{currentDate}</p>
             </div>
             <div class="flex flex-row gap-2 items-center ml-auto">
-              <progress
+              {/* <progress
                 id="completion"
                 max="100"
                 value={((progress / todos.length) * 100).toString()}
                 class="rounded-lg bg-blue"
               >
                 {((progress / todos.length) * 100).toString()}
-              </progress>
+              </progress> */}
+              {/* class={`w-[${((progress / todos.length) * 100).toString()}px] bg-blue` */}
+              <div class="w-56 border border-black h-2 rounded-full">
+                <div
+                  class={`bg-blue-500 transition-all duration-500 rounded-full h-full ease-in-out`}
+                  style={`width: ${(progress / todos.length) * 100}%`}
+                ></div>
+              </div>
               {todos.length > 0 && <p>{`${progress} of ${todos.length}`}</p>}
               {/* <button
                 onClick={() => changeDate(-1)}
@@ -152,6 +164,7 @@ function ToDoList() {
               const toShow: boolean =
                 JSON.stringify(date).slice(1, 11) ==
                 JSON.stringify(testingDate).slice(1, 11);
+              console.log(todo);
               return (
                 <>
                   {(toShow || todo.deadline === "") && (

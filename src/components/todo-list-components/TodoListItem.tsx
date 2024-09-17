@@ -28,6 +28,7 @@ export default function TodoListItem(props: any) {
             <p class="rounded-md p-2 bg-gray-200">{props.todo.time}</p>
           )}
           <button
+            disabled={props.todo.complete}
             onClick={() => props.enableEditing(props.todo)}
             class="bg-gray-200 py-2 px-3 rounded-md"
           >

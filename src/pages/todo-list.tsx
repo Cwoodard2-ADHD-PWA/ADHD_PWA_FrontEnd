@@ -16,13 +16,14 @@ function ToDoList() {
     deadline: string;
     time: string;
     complete: boolean;
-    subTasks: string[];
+    lists: string[];
   }
 
   const date = new Date();
   console.log(date);
 
   // TODO: Convert all form states into one state
+  // TODO: Change default state to a const variable instead of a function
   const [todos, setTodos] = useState<todoList[]>([]);
   const [currentTask, setCurrentTask] = useState<todoList>({
     task: "",
@@ -30,12 +31,13 @@ function ToDoList() {
     deadline: "",
     time: "",
     complete: false,
-    subTasks: [],
+    lists: [],
   });
-
+  const [currentList, setCurrentList] = useState<string>("Today");
   const [progress, setProgress] = useState<number>(0);
   const [addingTask, setAddingTask] = useState<boolean>(false);
   const [itemEdit, setItemEdit] = useState<string>("");
+  // TODO: Determine if I should just have the day be it's own thing, no state
   const [currentDate, setCurrentDate] = useState<any>(
     date.toString().slice(0, 15),
   );
@@ -47,22 +49,14 @@ function ToDoList() {
       deadline: "",
       time: "",
       complete: false,
-      subTasks: [],
+      lists: [],
     };
   }
 
-  /**
-   *
-   * @param e
-   */
   function handleChange(e: any) {
     setCurrentTask({ ...currentTask, [e.target.name]: e.target.value });
   }
 
-  /**
-   *
-   * @param action
-   */
   // function changeDate(action: number) {
   //   let date = new Date(currentDate);
   //   date.setDate(date.getDate() + action);
@@ -74,9 +68,15 @@ function ToDoList() {
 
     // TODO: Change the state such that the progress bar state is a counter of current complete items
     // TODO: Additionally, add logic that that results in progress being set accordingly to the date it is on
+    // TODO: Add logic that ensures no two added tasks are the same / find a better way to uniquely identify tasks
     console.log(todos);
     setTodos((prev: any) => [...prev, currentTask]);
     setAddingTask(false);
+    setCurrentTask(setDefaultTodoState());
+  }
+
+  function cancelAddTask() {
+    setAddingTask(!addingTask);
     setCurrentTask(setDefaultTodoState());
   }
 
@@ -136,7 +136,7 @@ function ToDoList() {
               <div class="w-56 border border-black h-2 rounded-full">
                 <div
                   class={`bg-blue-500 transition-all duration-500 rounded-full h-full ease-in-out`}
-                  style={`width: ${(progress / todos.length) * 100}%`}
+                  style={`width: ${todos.length > 0 ? (progress / todos.length) * 100 : 0}%`}
                 ></div>
               </div>
               {todos.length > 0 && <p>{`${progress} of ${todos.length}`}</p>}
@@ -157,6 +157,7 @@ function ToDoList() {
             </div>
           </div>
           <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto">
+            {/* //TODO: Filter code based on if it is in the current list - This would likely change a lot with a db */}
             {todos
               .sort((a: any, b: any) => a.time.localeCompare(b.time))
               .map((todo: any, index: number) => {
@@ -199,6 +200,7 @@ function ToDoList() {
                 changeCurrentTask={handleChange}
                 setCurrentTask={setCurrentTask}
                 addingTask={addingTask}
+                cancelAddTask={cancelAddTask}
               />
             )}
             <button

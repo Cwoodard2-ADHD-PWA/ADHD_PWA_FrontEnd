@@ -3,7 +3,7 @@ export default function ItemEditForm(props: any) {
     <>
       <form
         onSubmit={(e) => props.saveEdits(e, props.todo)}
-        class="flex flex-col gap-5 bg-gray-100 p-4 z-10 absolute md:top-0 top-10 left-0 h-screen w-full md:w-auto md:h-auto md:relative shadow-md transition-all animate-bottom-slide md:animate-left-slide rounded-t-lg"
+        class="flex flex-col gap-5 bg-gray-100 p-4 z-10 absolute md:top-0 bottom-[0%] left-0 h-screen w-full md:w-auto md:h-auto md:relative shadow-md transition-all animate-bottom-slide md:animate-left-slide rounded-t-lg"
       >
         <div class="flex flex-row">
           <button class="rounded-3xl hover:bg-white py-1 px-2 transition-all">

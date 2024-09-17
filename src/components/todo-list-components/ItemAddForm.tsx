@@ -58,6 +58,10 @@ export default function ItemAddForm(props: any) {
             <p class="rounded-md p-2 bg-gray-200">{props.currentTask.time}</p>
           )}
         </div>
+        <div>
+          <label for="description">Description</label>
+          <input id="description" name="description" type="text"></input>
+        </div>
       </div>
       <div>
         <label for="deadline">Date</label>

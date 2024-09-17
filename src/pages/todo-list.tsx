@@ -102,7 +102,6 @@ function ToDoList() {
   }
 
   function completeTask(e: any, task: any) {
-    console.log(e.target.checked);
     if (!e.target.checked) {
       setProgress((prev) => prev - 1);
     } else {
@@ -158,37 +157,38 @@ function ToDoList() {
             </div>
           </div>
           <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto">
-            {todos.map((todo: any, index: number) => {
-              const date = new Date(currentDate);
-              const testingDate = new Date(todo.deadline);
-              const toShow: boolean =
-                JSON.stringify(date).slice(1, 11) ==
-                JSON.stringify(testingDate).slice(1, 11);
-              console.log(todo);
-              return (
-                <>
-                  {(toShow || todo.deadline === "") && (
-                    <li key={index} class="flex flex-col md:flex-row gap-4">
-                      <TodoListItem
-                        todo={todo}
-                        completeTask={completeTask}
-                        enableEditing={enableEditing}
-                      />
-                      {itemEdit === todo.task && (
-                        <ItemEditForm
-                          currentTask={currentTask}
-                          saveEdits={saveEdits}
-                          enableEditing={enableEditing}
+            {todos
+              .sort((a: any, b: any) => a.time.localeCompare(b.time))
+              .map((todo: any, index: number) => {
+                const date = new Date(currentDate);
+                const testingDate = new Date(todo.deadline);
+                const toShow: boolean =
+                  JSON.stringify(date).slice(1, 11) ==
+                  JSON.stringify(testingDate).slice(1, 11);
+                return (
+                  <>
+                    {(toShow || todo.deadline === "") && (
+                      <li key={index} class="flex flex-col md:flex-row gap-4">
+                        <TodoListItem
                           todo={todo}
-                          changeCurrentTask={handleChange}
-                          setCurrentTask={setCurrentTask}
+                          completeTask={completeTask}
+                          enableEditing={enableEditing}
                         />
-                      )}
-                    </li>
-                  )}
-                </>
-              );
-            })}
+                        {itemEdit === todo.task && (
+                          <ItemEditForm
+                            currentTask={currentTask}
+                            saveEdits={saveEdits}
+                            enableEditing={enableEditing}
+                            todo={todo}
+                            changeCurrentTask={handleChange}
+                            setCurrentTask={setCurrentTask}
+                          />
+                        )}
+                      </li>
+                    )}
+                  </>
+                );
+              })}
           </ul>
           <div class="md:relative mt-auto">
             {addingTask && (

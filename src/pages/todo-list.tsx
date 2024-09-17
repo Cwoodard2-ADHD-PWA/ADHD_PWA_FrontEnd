@@ -38,9 +38,9 @@ function ToDoList() {
   const [addingTask, setAddingTask] = useState<boolean>(false);
   const [itemEdit, setItemEdit] = useState<string>("");
   // TODO: Determine if I should just have the day be it's own thing, no state
-  const [currentDate, setCurrentDate] = useState<any>(
-    date.toString().slice(0, 15),
-  );
+  // const [currentDate, setCurrentDate] = useState<any>(
+  //   date.toString().slice(0, 15),
+  // );
 
   function setDefaultTodoState() {
     return {
@@ -121,7 +121,7 @@ function ToDoList() {
           <div class="flex flex-col md:flex-row gap-4 w-full self-start">
             <div>
               <h1>Hello Cameron</h1>
-              <p>{currentDate}</p>
+              <p>{date.toString().slice(0, 15)}</p>
             </div>
             <div class="flex flex-row gap-2 items-center ml-auto">
               {/* <progress
@@ -161,10 +161,10 @@ function ToDoList() {
             {todos
               .sort((a: any, b: any) => a.time.localeCompare(b.time))
               .map((todo: any, index: number) => {
-                const date = new Date(currentDate);
+                const newDate = new Date(date.toString().slice(0, 15));
                 const testingDate = new Date(todo.deadline);
                 const toShow: boolean =
-                  JSON.stringify(date).slice(1, 11) ==
+                  JSON.stringify(newDate).slice(1, 11) ==
                   JSON.stringify(testingDate).slice(1, 11);
                 return (
                   <>

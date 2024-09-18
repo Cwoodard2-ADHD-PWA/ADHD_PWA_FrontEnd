@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useState, useRef } from "preact/hooks";
 import documentTitle from "../helper-functions/document-title";
 import DefaultPage from "../components/layout-components/DefaultPage";
 import TodoListItem from "../components/todo-list-components/TodoListItem";
@@ -19,39 +19,55 @@ function ToDoList() {
     lists: string[];
   }
 
-  const date = new Date();
-  console.log(date);
-
-  // TODO: Convert all form states into one state
-  // TODO: Change default state to a const variable instead of a function
-  const [todos, setTodos] = useState<todoList[]>([]);
-  const [currentTask, setCurrentTask] = useState<todoList>({
+  const defaultTodoList = {
     task: "",
     description: "",
     deadline: "",
     time: "",
     complete: false,
     lists: [],
-  });
-  const [currentList, setCurrentList] = useState<string>("Today");
+  };
+
+  const date = new Date();
+  console.log(date);
+
+  // TODO: Convert all form states into one state
+  // TODO: Change default state to a const variable instead of a function
+  // TODO: Consider using useRef instead of useState for the current task
+  const [todos, setTodos] = useState<todoList[]>([]);
+
+  const [currentTask, setCurrentTask] = useState<todoList>(defaultTodoList);
+
+  // const [currentList, setCurrentList] = useState<string>("Today");
   const [progress, setProgress] = useState<number>(0);
-  const [addingTask, setAddingTask] = useState<boolean>(false);
-  const [itemEdit, setItemEdit] = useState<string>("");
+
+  const addRef = useRef<HTMLDialogElement | null>(null);
+  const editRef = useRef<HTMLDialogElement | null>(null);
+
+  const openEdit = () => {
+    if (editRef.current) {
+      editRef.current.showModal();
+    }
+  };
+
+  const closeEdit = () => {
+    if (editRef.current) {
+      editRef.current.close();
+    }
+  };
+
+  const openAddTask = () => {
+    if (addRef.current) addRef.current.showModal();
+  };
+
+  const closeAddTask = () => {
+    if (addRef.current) addRef.current.close();
+  };
+
   // TODO: Determine if I should just have the day be it's own thing, no state
   // const [currentDate, setCurrentDate] = useState<any>(
   //   date.toString().slice(0, 15),
   // );
-
-  function setDefaultTodoState() {
-    return {
-      task: "",
-      description: "",
-      deadline: "",
-      time: "",
-      complete: false,
-      lists: [],
-    };
-  }
 
   function handleChange(e: any) {
     setCurrentTask({ ...currentTask, [e.target.name]: e.target.value });
@@ -66,18 +82,17 @@ function ToDoList() {
   function addTask(e: any) {
     e.preventDefault();
 
-    // TODO: Change the state such that the progress bar state is a counter of current complete items
     // TODO: Additionally, add logic that that results in progress being set accordingly to the date it is on
     // TODO: Add logic that ensures no two added tasks are the same / find a better way to uniquely identify tasks
-    console.log(todos);
+
     setTodos((prev: any) => [...prev, currentTask]);
-    setAddingTask(false);
-    setCurrentTask(setDefaultTodoState());
+    setCurrentTask(defaultTodoList);
+    closeAddTask();
   }
 
   function cancelAddTask() {
-    setAddingTask(!addingTask);
-    setCurrentTask(setDefaultTodoState());
+    setCurrentTask(defaultTodoList);
+    closeAddTask();
   }
 
   function enableEditing(todo: todoList) {
@@ -87,18 +102,17 @@ function ToDoList() {
       deadline: todo.deadline,
       time: todo.time,
     });
-    setItemEdit(todo.task);
+    openEdit();
   }
 
   function saveEdits(event: any, todo: todoList) {
     event.preventDefault();
     let objectIndex: any = todos.indexOf(todo);
-    console.log(objectIndex);
     let todoArray: any = todos;
     todoArray[objectIndex] = currentTask;
     setTodos(todoArray);
-    setCurrentTask(setDefaultTodoState());
-    setItemEdit("");
+    setCurrentTask(defaultTodoList);
+    closeEdit();
   }
 
   function completeTask(e: any, task: any) {
@@ -175,16 +189,22 @@ function ToDoList() {
                           completeTask={completeTask}
                           enableEditing={enableEditing}
                         />
-                        {itemEdit === todo.task && (
+                        <dialog
+                          id="dialog"
+                          ref={editRef}
+                          class="animate-bottom-slide transition-all duration-500 w-screen h-screen"
+                        >
                           <ItemEditForm
                             currentTask={currentTask}
                             saveEdits={saveEdits}
                             enableEditing={enableEditing}
                             todo={todo}
                             changeCurrentTask={handleChange}
-                            setCurrentTask={setCurrentTask}
                           />
-                        )}
+                          <button id="close" onClick={closeEdit}>
+                            Close
+                          </button>
+                        </dialog>
                       </li>
                     )}
                   </>
@@ -192,24 +212,29 @@ function ToDoList() {
               })}
           </ul>
           <div class="md:relative mt-auto">
-            {addingTask && (
-              <ItemAddForm
-                currentTask={currentTask}
-                addTask={addTask}
-                setAddingTask={setAddingTask}
-                changeCurrentTask={handleChange}
-                setCurrentTask={setCurrentTask}
-                addingTask={addingTask}
-                cancelAddTask={cancelAddTask}
-              />
-            )}
             <button
-              onClick={() => setAddingTask(!addingTask)}
               class="rounded-3xl bg-gray-200 py-2 px-4"
+              onClick={openAddTask}
             >
-              {addingTask ? "Close" : "Add Task"}
+              Add Task
             </button>
           </div>
+          <dialog
+            id="addTask"
+            ref={addRef}
+            class="animate-bottom-slide transition-all duration-500 w-screen h-screen"
+          >
+            <ItemAddForm
+              currentTask={currentTask}
+              addTask={addTask}
+              changeCurrentTask={handleChange}
+              setCurrentTask={setCurrentTask}
+              cancelAddTask={cancelAddTask}
+            />
+            <button id="close" onClick={closeAddTask}>
+              Close
+            </button>
+          </dialog>
         </GeneralPageWrapper>
         <RightSideBar />
       </DefaultPage>

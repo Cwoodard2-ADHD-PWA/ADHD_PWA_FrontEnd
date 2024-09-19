@@ -69,6 +69,7 @@ function ToDoList() {
   //   date.toString().slice(0, 15),
   // );
 
+  // TODO: Rename to settingCurrent task
   function handleChange(e: any) {
     setCurrentTask({ ...currentTask, [e.target.name]: e.target.value });
   }
@@ -173,6 +174,7 @@ function ToDoList() {
           <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto">
             {/* //TODO: Filter code based on if it is in the current list - This would likely change a lot with a db */}
             {todos
+              // .sort((a: any, b:any) => Number(a.complete) - Number(b.complete))
               .sort((a: any, b: any) => a.time.localeCompare(b.time))
               .map((todo: any, index: number) => {
                 const newDate = new Date(date.toString().slice(0, 15));
@@ -222,8 +224,11 @@ function ToDoList() {
           <dialog
             id="addTask"
             ref={addRef}
-            class="animate-bottom-slide transition-all duration-500 w-screen h-screen"
+            class="animate-bottom-slide transition-all duration-500 w-1/2 h-1/2 rounded-md shadow-sm shadow-black backdrop:bg-black backdrop:bg-opacity-55"
           >
+            {/* <button id="close" onClick={closeAddTask}>
+              Close
+            </button> */}
             <ItemAddForm
               currentTask={currentTask}
               addTask={addTask}
@@ -231,9 +236,6 @@ function ToDoList() {
               setCurrentTask={setCurrentTask}
               cancelAddTask={cancelAddTask}
             />
-            <button id="close" onClick={closeAddTask}>
-              Close
-            </button>
           </dialog>
         </GeneralPageWrapper>
         <RightSideBar />

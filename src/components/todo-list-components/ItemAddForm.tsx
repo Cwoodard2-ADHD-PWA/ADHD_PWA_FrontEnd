@@ -24,14 +24,15 @@ export default function ItemAddForm(props: any) {
   // }
 
   return (
+    // absolute w-full left-0 bottom-[0%] h-screen md:w-auto md:h-auto md:bottom-[60px] z-10
     // <div class="bg-gray-100 p-4 absolute w-full left-0 top-[5%] h-screen md:w-auto md:h-auto md:top-0 md:bottom-[60px] z-10 shadow-md animate-bottom-slide rounded-t-lg"></div>
-    <div class="bg-gray-100 p-4 absolute w-full left-0 bottom-[0%] h-screen md:w-auto md:h-auto md:bottom-[60px] z-10 shadow-md animate-bottom-slide rounded-t-lg">
-      <button
+    <div class="bg-gray-100 p-4 shadow-md animate-bottom-slide rounded-t-lg backdrop-blur w-full h-full">
+      {/* <button
         onClick={() => props.cancelAddTask()}
         class="rounded-3xl md:hover:bg-white border-2 border-white py-1 px-2 transition-all"
       >
         Cancel
-      </button>
+      </button> */}
       <form
         onSubmit={(e) => props.addTask(e)}
         class="flex flex-col gap-5"
@@ -42,7 +43,7 @@ export default function ItemAddForm(props: any) {
         <div>
           <label for="task">Task</label>
           <br></br>
-          <div class="flex flex-row bg-white gap-2 items-center p-1">
+          <div class="flex flex-row bg-white gap-2 items-center p-1 rounded-sm">
             <input
               required
               type={"text"}
@@ -67,38 +68,61 @@ export default function ItemAddForm(props: any) {
             )}
           </div>
         </div>
+        <div class="flex flex-row gap-3">
+          <div class="flex flex-col gap-2">
+            {/* w-20 relative */}
+            <label
+              for="deadline"
+              class="shadow-sm shadow-black rounded-full py-1 px-4 text-center bg-white"
+            >
+              {/* absolute left-0 top-0 */}
+              Date
+              {/* absolute opacity-0 w-full left-0 top-0 */}
+            </label>
+            <input
+              type={"date"}
+              name="deadline"
+              id="deadline"
+              value={props.currentTask.deadline}
+              onChange={(e: any) => props.changeCurrentTask(e)}
+              class="p-1 rounded-sm"
+            ></input>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label
+              for="time"
+              class="shadow-sm shadow-black rounded-full py-1 px-4 text-center bg-white"
+            >
+              Time
+            </label>
+            <input
+              type="time"
+              min="00:00"
+              max="23:00"
+              name="time"
+              id="time"
+              value={props.currentTask.time}
+              onChange={(e: any) => props.changeCurrentTask(e)}
+              class="p-1 rounded-sm"
+            ></input>
+          </div>
+        </div>
         <div>
-          <label for="description">Description</label>
+          <label for="description">Notes</label>
           <br></br>
           <input id="description" name="description" type="text"></input>
         </div>
-        <div>
-          <label for="deadline">Date</label>
-          <br></br>
-          <input
-            type={"date"}
-            name="deadline"
-            id="deadline"
-            value={props.currentTask.deadline}
-            onChange={(e: any) => props.changeCurrentTask(e)}
-          ></input>
+        <div class="flex flex-row items-center justify-evenly">
+          <button
+            onClick={() => props.cancelAddTask()}
+            class="rounded-3xl md:hover:bg-white border-2 border-white py-1 px-2 transition-all"
+          >
+            Cancel
+          </button>
+          <button type="submit" class="rounded-3xl bg-white py-2 px-4">
+            Add Task
+          </button>
         </div>
-        <div>
-          <label for="time">Time</label>
-          <br></br>
-          <input
-            type="time"
-            min="00:00"
-            max="23:00"
-            name="time"
-            id="time"
-            value={props.currentTask.time}
-            onChange={(e: any) => props.changeCurrentTask(e)}
-          ></input>
-        </div>
-        <button type="submit" class="rounded-3xl bg-white py-2 px-4">
-          Add Task
-        </button>
       </form>
     </div>
   );

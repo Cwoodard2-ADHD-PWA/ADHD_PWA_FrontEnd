@@ -14,10 +14,15 @@ export default {
           "0%": { transform: "translateY(30px)", opacity: "0%" },
           100: { transform: "translateX(0px)", opacity: "100%" },
         },
+        fadeIn: {
+          0: { opacity: "0%" },
+          100: { opacity: "100%" },
+        },
       },
       animation: {
         "left-slide": "slideFromLeft 0.25s linear",
         "bottom-slide": "slideFromBottom 0.25s linear",
+        "fade-in": "fadeIn 3s linear",
       },
     },
   },

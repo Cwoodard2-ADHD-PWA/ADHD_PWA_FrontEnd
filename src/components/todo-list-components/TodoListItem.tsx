@@ -1,6 +1,7 @@
 export default function TodoListItem(props: any) {
   return (
     <>
+      {/* //TODO: Add functionality that results in being able to view subtasks and notes */}
       <div
         class={`flex flex-row gap-2 min-w-80 md:min-w-96 max-w-2xl p-1 border-2 border-gray-200 rounded-lg justify-items-center self-start ${props.todo.complete && "opacity-50"} transition-all duration-500`}
       >

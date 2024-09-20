@@ -9,6 +9,9 @@ export default function RightSideBar() {
         <li>
           <button>Upcoming</button>
         </li>
+        <li>
+          <button>Completed</button>
+        </li>
       </ul>
     </div>
   );

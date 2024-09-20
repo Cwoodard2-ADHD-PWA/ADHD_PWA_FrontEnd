@@ -25,8 +25,8 @@ export default function ItemAddForm(props: any) {
 
   return (
     // absolute w-full left-0 bottom-[0%] h-screen md:w-auto md:h-auto md:bottom-[60px] z-10
-    // <div class="bg-gray-100 p-4 absolute w-full left-0 top-[5%] h-screen md:w-auto md:h-auto md:top-0 md:bottom-[60px] z-10 shadow-md animate-bottom-slide rounded-t-lg"></div>
-    <div class="bg-gray-100 p-4 shadow-md animate-bottom-slide rounded-t-lg backdrop-blur w-full h-full">
+    // <div class="bg-gray-100 p-4 absolute w-full left-0 top-[5%] h-screen md:w-auto md:h-auto md:top-0 md:bottom-[60px] z-10 shadow-md animate-bottom-slide rounded-t-lg animate-bottom-slide"></div>
+    <div class="bg-gray-100 p-4 shadow-md rounded-t-lg backdrop-blur w-full md:h-full">
       {/* <button
         onClick={() => props.cancelAddTask()}
         class="rounded-3xl md:hover:bg-white border-2 border-white py-1 px-2 transition-all"
@@ -35,11 +35,12 @@ export default function ItemAddForm(props: any) {
       </button> */}
       <form
         onSubmit={(e) => props.addTask(e)}
-        class="flex flex-col gap-5"
+        class="flex flex-col gap-5 h-full w-full"
         // onBlur={(e: any) => handleBlur(e)}
         // tabIndex={1}
         id="addForm"
       >
+        <h3>Add a Task</h3>
         <div>
           <label for="task">Task</label>
           <br></br>
@@ -55,25 +56,15 @@ export default function ItemAddForm(props: any) {
               onChange={(e: any) => props.changeCurrentTask(e)}
               placeholder="Add a New Task"
             ></input>
-            {props.currentTask.deadline && (
-              <span class="rounded-md p-2 bg-gray-200 text-nowrap">
-                {monthConverter(
-                  props.currentTask.deadline.slice(5, 7),
-                  props.currentTask.deadline.slice(8, 10),
-                )}
-              </span>
-            )}
-            {props.currentTask.time && (
-              <p class="rounded-md p-2 bg-gray-200">{props.currentTask.time}</p>
-            )}
           </div>
         </div>
-        <div class="flex flex-row gap-3">
+        <div class="flex flex-col md:flex-row gap-3 justify-between">
+          {/* w-20 relative */}
           <div class="flex flex-col gap-2">
-            {/* w-20 relative */}
+            {/* <div class={`rounded-full py-1 px-4 text-center transition-all flex flex-col gap-2 justify-center`}> */}
             <label
               for="deadline"
-              class="shadow-sm shadow-black rounded-full py-1 px-4 text-center bg-white"
+              // class="absolute left-0 top-0"
             >
               {/* absolute left-0 top-0 */}
               Date
@@ -85,14 +76,22 @@ export default function ItemAddForm(props: any) {
               id="deadline"
               value={props.currentTask.deadline}
               onChange={(e: any) => props.changeCurrentTask(e)}
-              class="p-1 rounded-sm"
+              class="py-1 px-2 rounded-md"
             ></input>
+            {/* </div> */}
+            {props.currentTask.deadline && (
+              <span
+                class={`rounded-full text-nowrap w-full py-1 px-4 text-center bg-white ${props.currentTask.deadline && "border border-green-600"} animate-left-slide transition-all`}
+              >
+                {monthConverter(
+                  props.currentTask.deadline.slice(5, 7),
+                  props.currentTask.deadline.slice(8, 10),
+                )}
+              </span>
+            )}
           </div>
           <div class="flex flex-col gap-2">
-            <label
-              for="time"
-              class="shadow-sm shadow-black rounded-full py-1 px-4 text-center bg-white"
-            >
+            <label for="time" class={``}>
               Time
             </label>
             <input
@@ -103,14 +102,51 @@ export default function ItemAddForm(props: any) {
               id="time"
               value={props.currentTask.time}
               onChange={(e: any) => props.changeCurrentTask(e)}
-              class="p-1 rounded-sm"
+              class="py-1 px-2 rounded-md"
             ></input>
+            {props.currentTask.time && (
+              <span
+                class={`rounded-full text-nowrap w-full py-1 px-4 text-center bg-white ${props.currentTask.time && "border border-green-600"} animate-left-slide transition-all`}
+              >
+                {props.currentTask.time}
+              </span>
+            )}
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="lists">Lists</label>
+            <select
+              id="lists"
+              name="lists"
+              onChange={(e: any) => props.changeCurrentTask(e)}
+              value={props.currentTask.lists}
+              class="py-1 px-2 rounded-md"
+            >
+              <option value="Testing">Select An Option</option>
+              <option value="Testing 2">Other List</option>
+            </select>
           </div>
         </div>
-        <div>
+        <div class="flex flex-col gap-2">
           <label for="description">Notes</label>
-          <br></br>
-          <input id="description" name="description" type="text"></input>
+          <textarea
+            id="description"
+            name="description"
+            type="text"
+            value={props.currentTask.description}
+            onChange={(e: any) => props.changeCurrentTask(e)}
+            class="py-1 px-2 rounded-md"
+          ></textarea>
+        </div>
+        {/* //TODO: Create functionality to add subtasks */}
+        <div class="flex flex-col gap-2">
+          <label for="subtasks">Subtasks</label>
+          <div class="flex flex-row gap-2">
+            <input id="subtasks" name="subtasks" type="text"></input>
+            <button onClick={(e: any) => props.changeCurrentTask(e)}>
+              Add Task
+            </button>
+          </div>
+          {/* onKeyDown={(e: any) => props.changeCurrentTask(e)} */}
         </div>
         <div class="flex flex-row items-center justify-evenly">
           <button

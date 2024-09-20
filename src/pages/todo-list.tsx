@@ -11,12 +11,14 @@ function ToDoList() {
   documentTitle("Todo List");
 
   interface todoList {
+    [index: string]: string | string[] | boolean;
     task: string;
     description: string;
     deadline: string;
     time: string;
     complete: boolean;
-    lists: string[];
+    lists: string;
+    subtasks: string[];
   }
 
   const defaultTodoList = {
@@ -25,7 +27,8 @@ function ToDoList() {
     deadline: "",
     time: "",
     complete: false,
-    lists: [],
+    lists: "",
+    subtasks: [],
   };
 
   const date = new Date();
@@ -71,7 +74,20 @@ function ToDoList() {
 
   // TODO: Rename to settingCurrent task
   function handleChange(e: any) {
-    setCurrentTask({ ...currentTask, [e.target.name]: e.target.value });
+    e.preventDefault();
+    console.log(e.which);
+    console.log(e.target.value);
+    if (e.target.name == "subtasks") {
+      const listToAddTo: any = currentTask[e.target.name];
+      console.log(e.target.name);
+      console.log(listToAddTo);
+      setCurrentTask({
+        ...currentTask,
+        [e.target.name]: [...listToAddTo, e.target.value],
+      });
+    } else {
+      setCurrentTask({ ...currentTask, [e.target.name]: e.target.value });
+    }
   }
 
   // function changeDate(action: number) {
@@ -82,7 +98,7 @@ function ToDoList() {
 
   function addTask(e: any) {
     e.preventDefault();
-
+    console.log(currentTask);
     // TODO: Additionally, add logic that that results in progress being set accordingly to the date it is on
     // TODO: Add logic that ensures no two added tasks are the same / find a better way to uniquely identify tasks
 
@@ -96,13 +112,13 @@ function ToDoList() {
     closeAddTask();
   }
 
+  function cancelEdit() {
+    setCurrentTask(defaultTodoList);
+    closeEdit();
+  }
+
   function enableEditing(todo: todoList) {
-    setCurrentTask({
-      ...currentTask,
-      task: todo.task,
-      deadline: todo.deadline,
-      time: todo.time,
-    });
+    setCurrentTask(todo);
     openEdit();
   }
 
@@ -194,18 +210,18 @@ function ToDoList() {
                         <dialog
                           id="dialog"
                           ref={editRef}
-                          class="animate-bottom-slide transition-all duration-500 w-screen h-screen"
+                          class="animate-bottom-slide transition-all duration-500 w-full h-full md:w-1/2 md:h-3/4 rounded-md shadow-sm shadow-black backdrop:bg-black backdrop:bg-opacity-55"
                         >
                           <ItemEditForm
                             currentTask={currentTask}
                             saveEdits={saveEdits}
-                            enableEditing={enableEditing}
+                            cancelEdit={cancelEdit}
                             todo={todo}
                             changeCurrentTask={handleChange}
                           />
-                          <button id="close" onClick={closeEdit}>
+                          {/* <button id="close" onClick={closeEdit}>
                             Close
-                          </button>
+                          </button> */}
                         </dialog>
                       </li>
                     )}
@@ -224,7 +240,7 @@ function ToDoList() {
           <dialog
             id="addTask"
             ref={addRef}
-            class="animate-bottom-slide transition-all duration-500 w-1/2 h-1/2 rounded-md shadow-sm shadow-black backdrop:bg-black backdrop:bg-opacity-55"
+            class="animate-bottom-slide transition-all duration-500 w-full h-full md:w-1/2 md:h-3/4 rounded-md shadow-sm shadow-black backdrop:bg-black backdrop:bg-opacity-55"
           >
             {/* <button id="close" onClick={closeAddTask}>
               Close

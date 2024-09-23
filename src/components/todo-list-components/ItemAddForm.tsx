@@ -1,43 +1,14 @@
 // import { useEffect } from "preact/hooks";
 import monthConverter from "../../helper-functions/month-converter";
-/**
- *
- * @param props
- * @returns
- */
+
 export default function ItemAddForm(props: any) {
-  // useEffect(() => {
-  //   document.getElementById('addForm')?.focus();
-  // }, [props.addingTask])
-
-  // function handleBlur(e: any) {
-  //   if (!e.currentTarget.contains(e.relatedTarget)) {
-  //     props.setCurrentTask({
-  //       task: "",
-  //       deadline: "",
-  //       time: "",
-  //       progress: "",
-  //       subTasks: [],
-  //     })
-  //     props.setAddingTask(false);
-  //   }
-  // }
-
   return (
     // absolute w-full left-0 bottom-[0%] h-screen md:w-auto md:h-auto md:bottom-[60px] z-10
     // <div class="bg-gray-100 p-4 absolute w-full left-0 top-[5%] h-screen md:w-auto md:h-auto md:top-0 md:bottom-[60px] z-10 shadow-md animate-bottom-slide rounded-t-lg animate-bottom-slide"></div>
     <div class="bg-gray-100 p-4 shadow-md rounded-t-lg backdrop-blur w-full md:h-full">
-      {/* <button
-        onClick={() => props.cancelAddTask()}
-        class="rounded-3xl md:hover:bg-white border-2 border-white py-1 px-2 transition-all"
-      >
-        Cancel
-      </button> */}
       <form
         onSubmit={(e) => props.addTask(e)}
         class="flex flex-col gap-5 h-full w-full"
-        // onBlur={(e: any) => handleBlur(e)}
-        // tabIndex={1}
         id="addForm"
       >
         <h3>Add a Task</h3>
@@ -97,7 +68,7 @@ export default function ItemAddForm(props: any) {
             <input
               type="time"
               min="00:00"
-              max="23:00"
+              max="23:59"
               name="time"
               id="time"
               value={props.currentTask.time}
@@ -139,17 +110,30 @@ export default function ItemAddForm(props: any) {
         </div>
         {/* //TODO: Create functionality to add subtasks */}
         <div class="flex flex-col gap-2">
-          <label for="subtasks">Subtasks</label>
-          <div class="flex flex-row gap-2">
-            <input id="subtasks" name="subtasks" type="text"></input>
-            <button onClick={(e: any) => props.changeCurrentTask(e)}>
-              Add Task
-            </button>
-          </div>
+          <ul>
+            {props.currentTask.subtasks.map((subtask: any) => (
+              <li>{subtask}</li>
+            ))}
+            <li>
+              <div>
+                <label for="subtasks">Subtasks</label>
+                <div class="flex flex-row gap-2">
+                  <input id="subtasks" name="subtasks" type="text"></input>
+                  <button
+                    type="button"
+                    onClick={() => props.addSubtask("New Subtask")}
+                  >
+                    Add Task
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
           {/* onKeyDown={(e: any) => props.changeCurrentTask(e)} */}
         </div>
         <div class="flex flex-row items-center justify-evenly">
           <button
+            type="button"
             onClick={() => props.cancelAddTask()}
             class="rounded-3xl md:hover:bg-white border-2 border-white py-1 px-2 transition-all"
           >

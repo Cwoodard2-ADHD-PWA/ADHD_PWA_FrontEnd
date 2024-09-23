@@ -37,6 +37,16 @@ export default function TodoListItem(props: any) {
           </button>
         </div>
       </div>
+      {props.todo.subtasks.length > 0 && (
+        <details>
+          <summary>Subtasks</summary>
+          <ul>
+            {props.todo.subtasks.map((subtask: any) => (
+              <li>{subtask}</li>
+            ))}
+          </ul>
+        </details>
+      )}
     </>
   );
 }

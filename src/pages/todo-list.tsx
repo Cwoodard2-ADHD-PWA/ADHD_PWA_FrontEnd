@@ -21,6 +21,11 @@ function ToDoList() {
     subtasks: string[];
   }
 
+  interface subtask {
+    task: string;
+    isComplete: boolean;
+  }
+
   const defaultTodoList = {
     task: "",
     description: "",
@@ -35,7 +40,6 @@ function ToDoList() {
   console.log(date);
 
   // TODO: Convert all form states into one state
-  // TODO: Change default state to a const variable instead of a function
   // TODO: Consider using useRef instead of useState for the current task
   const [todos, setTodos] = useState<todoList[]>([]);
 
@@ -105,6 +109,14 @@ function ToDoList() {
     setTodos((prev: any) => [...prev, currentTask]);
     setCurrentTask(defaultTodoList);
     closeAddTask();
+  }
+
+  function addSubtask(e: any) {
+    const listToAddTo: any = currentTask["subtasks"];
+    setCurrentTask({
+      ...currentTask,
+      ["subtasks"]: [...listToAddTo, e],
+    });
   }
 
   function cancelAddTask() {
@@ -187,7 +199,7 @@ function ToDoList() {
               </button> */}
             </div>
           </div>
-          <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto">
+          <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto md:max-w-full">
             {/* //TODO: Filter code based on if it is in the current list - This would likely change a lot with a db */}
             {todos
               // .sort((a: any, b:any) => Number(a.complete) - Number(b.complete))
@@ -201,7 +213,7 @@ function ToDoList() {
                 return (
                   <>
                     {(toShow || todo.deadline === "") && (
-                      <li key={index} class="flex flex-col md:flex-row gap-4">
+                      <li key={index} class="flex flex-col gap-4">
                         <TodoListItem
                           todo={todo}
                           completeTask={completeTask}
@@ -251,6 +263,7 @@ function ToDoList() {
               changeCurrentTask={handleChange}
               setCurrentTask={setCurrentTask}
               cancelAddTask={cancelAddTask}
+              addSubtask={addSubtask}
             />
           </dialog>
         </GeneralPageWrapper>

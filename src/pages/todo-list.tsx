@@ -11,14 +11,14 @@ function ToDoList() {
   documentTitle("Todo List");
 
   interface todoList {
-    [index: string]: string | string[] | boolean;
+    [index: string]: string | string[] | boolean | subtask[];
     task: string;
     description: string;
     deadline: string;
     time: string;
     complete: boolean;
     lists: string;
-    subtasks: string[];
+    subtasks: subtask[];
   }
 
   interface subtask {
@@ -115,7 +115,7 @@ function ToDoList() {
     const listToAddTo: any = currentTask["subtasks"];
     setCurrentTask({
       ...currentTask,
-      ["subtasks"]: [...listToAddTo, e],
+      ["subtasks"]: [...listToAddTo, { task: e, isComplete: false }],
     });
   }
 
@@ -155,6 +155,22 @@ function ToDoList() {
         todo.task == task.task ? { ...task, complete: !todo.complete } : todo,
       ),
     );
+  }
+
+  function removeTask(task: string) {
+    setTodos((prev) => prev.filter((todo: any) => todo.task !== task));
+    setCurrentTask(defaultTodoList);
+    closeEdit();
+  }
+
+  function removeSubtask(task: string) {
+    const subtaskList: any = currentTask.subtasks.filter(
+      (subtask) => subtask.task !== task,
+    );
+    setCurrentTask({
+      ...currentTask,
+      ["subtasks"]: subtaskList,
+    });
   }
 
   return (
@@ -205,6 +221,7 @@ function ToDoList() {
               // .sort((a: any, b:any) => Number(a.complete) - Number(b.complete))
               .sort((a: any, b: any) => a.time.localeCompare(b.time))
               .map((todo: any, index: number) => {
+                console.log(todos);
                 const newDate = new Date(date.toString().slice(0, 15));
                 const testingDate = new Date(todo.deadline);
                 const toShow: boolean =
@@ -230,10 +247,8 @@ function ToDoList() {
                             cancelEdit={cancelEdit}
                             todo={todo}
                             changeCurrentTask={handleChange}
+                            removeTask={removeTask}
                           />
-                          {/* <button id="close" onClick={closeEdit}>
-                            Close
-                          </button> */}
                         </dialog>
                       </li>
                     )}
@@ -264,6 +279,7 @@ function ToDoList() {
               setCurrentTask={setCurrentTask}
               cancelAddTask={cancelAddTask}
               addSubtask={addSubtask}
+              removeSubtask={removeSubtask}
             />
           </dialog>
         </GeneralPageWrapper>

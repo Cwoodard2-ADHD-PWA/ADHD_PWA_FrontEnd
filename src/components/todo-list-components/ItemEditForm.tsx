@@ -47,12 +47,20 @@ export default function ItemEditForm(props: any) {
           </div>
           <div class="flex flex-row">
             <button
+              type="button"
               class="rounded-3xl hover:bg-white py-1 px-2 transition-all"
               onClick={() => props.cancelEdit()}
             >
               Cancel
             </button>
             {/* class="rounded-3xl bg-white py-2 px-4 ml-auto" */}
+            <button
+              type="button"
+              class="rounded-3xl hover:bg-white py-1 px-2 ml-auto transition-all"
+              onClick={() => props.removeTask(props.currentTask.task)}
+            >
+              Delete Task
+            </button>
             <button
               type="submit"
               class="rounded-3xl hover:bg-white py-1 px-2 ml-auto transition-all"

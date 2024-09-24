@@ -1,7 +1,15 @@
 // import { useEffect } from "preact/hooks";
+import { useState } from "preact/hooks";
 import monthConverter from "../../helper-functions/month-converter";
 
 export default function ItemAddForm(props: any) {
+  const [subtask, setSubtask] = useState<string>("");
+
+  function handleAddSubtask() {
+    props.addSubtask(subtask);
+    setSubtask("");
+  }
+
   return (
     // absolute w-full left-0 bottom-[0%] h-screen md:w-auto md:h-auto md:bottom-[60px] z-10
     // <div class="bg-gray-100 p-4 absolute w-full left-0 top-[5%] h-screen md:w-auto md:h-auto md:top-0 md:bottom-[60px] z-10 shadow-md animate-bottom-slide rounded-t-lg animate-bottom-slide"></div>
@@ -11,7 +19,7 @@ export default function ItemAddForm(props: any) {
         class="flex flex-col gap-5 h-full w-full"
         id="addForm"
       >
-        <h3>Add a Task</h3>
+        <h3 class="text-3xl">Add a Task</h3>
         <div>
           <label for="task">Task</label>
           <br></br>
@@ -110,19 +118,30 @@ export default function ItemAddForm(props: any) {
         </div>
         {/* //TODO: Create functionality to add subtasks */}
         <div class="flex flex-col gap-2">
+          <label for="subtasks">Subtasks</label>
           <ul>
             {props.currentTask.subtasks.map((subtask: any) => (
-              <li>{subtask}</li>
+              <li>
+                {subtask.task}{" "}
+                <button
+                  type="button"
+                  onClick={() => props.removeSubtask(subtask.task)}
+                >
+                  Remove
+                </button>
+              </li>
             ))}
             <li>
               <div>
-                <label for="subtasks">Subtasks</label>
                 <div class="flex flex-row gap-2">
-                  <input id="subtasks" name="subtasks" type="text"></input>
-                  <button
-                    type="button"
-                    onClick={() => props.addSubtask("New Subtask")}
-                  >
+                  <input
+                    id="subtasks"
+                    name="subtasks"
+                    type="text"
+                    value={subtask}
+                    onChange={(e: any) => setSubtask(e.target.value)}
+                  ></input>
+                  <button type="button" onClick={() => handleAddSubtask()}>
                     Add Task
                   </button>
                 </div>

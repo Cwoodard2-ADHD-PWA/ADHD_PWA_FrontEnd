@@ -42,7 +42,7 @@ export default function TodoListItem(props: any) {
           <summary>Subtasks</summary>
           <ul>
             {props.todo.subtasks.map((subtask: any) => (
-              <li>{subtask}</li>
+              <li>{subtask.task}</li>
             ))}
           </ul>
         </details>

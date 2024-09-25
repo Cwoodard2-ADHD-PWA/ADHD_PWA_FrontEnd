@@ -1,5 +1,7 @@
 // import { useEffect } from "preact/hooks";
 import { useState } from "preact/hooks";
+import AddFormSubtask from "./AddFormSubtask";
+import AddEditForm from "./AddEditForm";
 import monthConverter from "../../helper-functions/month-converter";
 
 export default function ItemAddForm(props: any) {
@@ -20,7 +22,15 @@ export default function ItemAddForm(props: any) {
         id="addForm"
       >
         <h3 class="text-3xl">Add a Task</h3>
-        <div>
+        <AddEditForm
+          currentTask={props.currentTask}
+          changeCurrentTask={props.changeCurrentTask}
+          removeSubtask={props.removeSubtask}
+          setSubtask={setSubtask}
+          handleAddSubtask={handleAddSubtask}
+          subtask={subtask}
+        />
+        {/* <div>
           <label for="task">Task</label>
           <br></br>
           <div class="flex flex-row bg-white gap-2 items-center p-1 rounded-sm">
@@ -38,16 +48,11 @@ export default function ItemAddForm(props: any) {
           </div>
         </div>
         <div class="flex flex-col md:flex-row gap-3 justify-between">
-          {/* w-20 relative */}
           <div class="flex flex-col gap-2">
-            {/* <div class={`rounded-full py-1 px-4 text-center transition-all flex flex-col gap-2 justify-center`}> */}
             <label
               for="deadline"
-              // class="absolute left-0 top-0"
             >
-              {/* absolute left-0 top-0 */}
               Date
-              {/* absolute opacity-0 w-full left-0 top-0 */}
             </label>
             <input
               type={"date"}
@@ -57,7 +62,6 @@ export default function ItemAddForm(props: any) {
               onChange={(e: any) => props.changeCurrentTask(e)}
               class="py-1 px-2 rounded-md"
             ></input>
-            {/* </div> */}
             {props.currentTask.deadline && (
               <span
                 class={`rounded-full text-nowrap w-full py-1 px-4 text-center bg-white ${props.currentTask.deadline && "border border-green-600"} animate-left-slide transition-all`}
@@ -116,19 +120,12 @@ export default function ItemAddForm(props: any) {
             class="py-1 px-2 rounded-md"
           ></textarea>
         </div>
-        {/* //TODO: Create functionality to add subtasks */}
         <div class="flex flex-col gap-2">
           <label for="subtasks">Subtasks</label>
           <ul>
             {props.currentTask.subtasks.map((subtask: any) => (
               <li>
-                {subtask.task}{" "}
-                <button
-                  type="button"
-                  onClick={() => props.removeSubtask(subtask.task)}
-                >
-                  Remove
-                </button>
+                <AddFormSubtask subtask={subtask} removeSubtask={props.removeSubtask}/>
               </li>
             ))}
             <li>
@@ -148,8 +145,7 @@ export default function ItemAddForm(props: any) {
               </div>
             </li>
           </ul>
-          {/* onKeyDown={(e: any) => props.changeCurrentTask(e)} */}
-        </div>
+        </div> */}
         <div class="flex flex-row items-center justify-evenly">
           <button
             type="button"

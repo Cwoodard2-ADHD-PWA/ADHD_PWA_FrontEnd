@@ -1,6 +1,17 @@
+import AddEditForm from "./AddEditForm";
+import { useState } from "preact/hooks";
+
 export default function ItemEditForm(props: any) {
   // TODO: Make it so that input elements automatically switch between a view component and an editable component when clicked on
   // TODO: This needs to be made to match up better with the Add Task form; However, this form will likely utilize a different design to an extent
+
+  const [subtask, setSubtask] = useState<string>("");
+
+  function handleAddSubtask() {
+    props.addSubtask(subtask);
+    setSubtask("");
+  }
+
   return (
     <>
       <div class="bg-gray-100 p-4 shadow-md animate-bottom-slide rounded-t-lg backdrop-blur w-full h-full">
@@ -8,7 +19,15 @@ export default function ItemEditForm(props: any) {
           onSubmit={(e) => props.saveEdits(e, props.todo)}
           class="flex flex-col gap-5"
         >
-          <div>
+          <AddEditForm
+            currentTask={props.currentTask}
+            changeCurrentTask={props.changeCurrentTask}
+            removeSubtask={props.removeSubtask}
+            setSubtask={setSubtask}
+            handleAddSubtask={handleAddSubtask}
+            subtask={subtask}
+          />
+          {/* <div>
             <label for="task">Task</label>
             <br></br>
             <input
@@ -44,7 +63,7 @@ export default function ItemEditForm(props: any) {
               value={props.currentTask.time}
               onChange={(e: any) => props.changeCurrentTask(e)}
             ></input>
-          </div>
+          </div> */}
           <div class="flex flex-row">
             <button
               type="button"

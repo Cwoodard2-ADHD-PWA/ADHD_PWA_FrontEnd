@@ -1,3 +1,5 @@
+import TodoListSubtask from "./TodoListSubtask";
+
 export default function TodoListItem(props: any) {
   return (
     <>
@@ -41,8 +43,10 @@ export default function TodoListItem(props: any) {
         <details>
           <summary>Subtasks</summary>
           <ul>
-            {props.todo.subtasks.map((subtask: any) => (
-              <li>{subtask.task}</li>
+            {props.todo.subtasks.map((subtask: any, index: number) => (
+              <li>
+                <TodoListSubtask index={index} subtask={subtask} />
+              </li>
             ))}
           </ul>
         </details>

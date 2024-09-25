@@ -1,4 +1,4 @@
-import { useState, useRef } from "preact/hooks";
+import { useState, useRef, useEffect } from "preact/hooks";
 import documentTitle from "../helper-functions/document-title";
 import DefaultPage from "../components/layout-components/DefaultPage";
 import TodoListItem from "../components/todo-list-components/TodoListItem";
@@ -6,6 +6,8 @@ import ItemEditForm from "../components/todo-list-components/ItemEditForm";
 import ItemAddForm from "../components/todo-list-components/ItemAddForm";
 import RightSideBar from "../components/todo-list-components/RightSideBar";
 import GeneralPageWrapper from "../components/layout-components/GeneralPageWrapper";
+
+// TODO: IT'S TIME FOR GLOBAL STATE MANAGEMENT!
 
 function ToDoList() {
   documentTitle("Todo List");
@@ -47,6 +49,7 @@ function ToDoList() {
 
   // const [currentList, setCurrentList] = useState<string>("Today");
   const [progress, setProgress] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const addRef = useRef<HTMLDialogElement | null>(null);
   const editRef = useRef<HTMLDialogElement | null>(null);
@@ -173,6 +176,42 @@ function ToDoList() {
     });
   }
 
+  useEffect(() => {
+    async function testDB() {
+      var body: any;
+      try {
+        const response: any = await fetch("http://localhost:3000/users");
+
+        body = await response.json();
+      } catch (err) {
+        console.log(err);
+      }
+
+      try {
+        setTodos(
+          body.map((task: any) => {
+            return {
+              task: task.task_name,
+              description: "",
+              deadline: "",
+              time: "",
+              complete: task.complete,
+              lists: [],
+              subtasks: [],
+            };
+          }),
+        );
+      } catch (err) {
+        console.log(err);
+      } finally {
+        console.log("here");
+        setTodos([]);
+        setLoading(false);
+      }
+    }
+    testDB();
+  }, []);
+
   return (
     <>
       <DefaultPage>
@@ -215,47 +254,51 @@ function ToDoList() {
               </button> */}
             </div>
           </div>
-          <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto md:max-w-full">
-            {/* //TODO: Filter code based on if it is in the current list - This would likely change a lot with a db */}
-            {todos
-              // .sort((a: any, b:any) => Number(a.complete) - Number(b.complete))
-              .sort((a: any, b: any) => a.time.localeCompare(b.time))
-              .map((todo: any, index: number) => {
-                console.log(todos);
-                const newDate = new Date(date.toString().slice(0, 15));
-                const testingDate = new Date(todo.deadline);
-                const toShow: boolean =
-                  JSON.stringify(newDate).slice(1, 11) ==
-                  JSON.stringify(testingDate).slice(1, 11);
-                return (
-                  <>
-                    {(toShow || todo.deadline === "") && (
-                      <li key={index} class="flex flex-col gap-4">
-                        <TodoListItem
-                          todo={todo}
-                          completeTask={completeTask}
-                          enableEditing={enableEditing}
-                        />
-                        <dialog
-                          id="dialog"
-                          ref={editRef}
-                          class="animate-bottom-slide transition-all duration-500 w-full h-full md:w-1/2 md:h-3/4 rounded-md shadow-sm shadow-black backdrop:bg-black backdrop:bg-opacity-55"
-                        >
-                          <ItemEditForm
-                            currentTask={currentTask}
-                            saveEdits={saveEdits}
-                            cancelEdit={cancelEdit}
+          {!loading && (
+            <ul class="flex flex-col gap-3 max-h-[250px] md:max-h-[550px] overflow-auto md:max-w-full">
+              {/* //TODO: Filter code based on if it is in the current list - This would likely change a lot with a db */}
+              {todos
+                // .sort((a: any, b:any) => Number(a.complete) - Number(b.complete))
+                .sort((a: any, b: any) => a.time.localeCompare(b.time))
+                .map((todo: any, index: number) => {
+                  console.log(todos);
+                  const newDate = new Date(date.toString().slice(0, 15));
+                  const testingDate = new Date(todo.deadline);
+                  const toShow: boolean =
+                    JSON.stringify(newDate).slice(1, 11) ==
+                    JSON.stringify(testingDate).slice(1, 11);
+                  return (
+                    <>
+                      {(toShow || todo.deadline === "") && (
+                        <li key={index} class="flex flex-col gap-4">
+                          <TodoListItem
                             todo={todo}
-                            changeCurrentTask={handleChange}
-                            removeTask={removeTask}
+                            completeTask={completeTask}
+                            enableEditing={enableEditing}
                           />
-                        </dialog>
-                      </li>
-                    )}
-                  </>
-                );
-              })}
-          </ul>
+                          <dialog
+                            id="dialog"
+                            ref={editRef}
+                            class="animate-bottom-slide transition-all duration-500 w-full h-full md:w-1/2 md:h-3/4 rounded-md shadow-sm shadow-black backdrop:bg-black backdrop:bg-opacity-55"
+                          >
+                            <ItemEditForm
+                              currentTask={currentTask}
+                              saveEdits={saveEdits}
+                              cancelEdit={cancelEdit}
+                              todo={todo}
+                              changeCurrentTask={handleChange}
+                              removeTask={removeTask}
+                              addSubtask={addSubtask}
+                              removeSubtask={removeSubtask}
+                            />
+                          </dialog>
+                        </li>
+                      )}
+                    </>
+                  );
+                })}
+            </ul>
+          )}
           <div class="md:relative mt-auto">
             <button
               class="rounded-3xl bg-gray-200 py-2 px-4"

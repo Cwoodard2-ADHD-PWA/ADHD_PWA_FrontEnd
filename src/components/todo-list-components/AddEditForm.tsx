@@ -7,7 +7,7 @@ export default function AddEditForm(props: any) {
       <div>
         <label for="task">Task</label>
         <br></br>
-        <div class="flex flex-row bg-white gap-2 items-center p-1 rounded-sm">
+        <div class="flex flex-row bg-white gap-2 items-center p-1 rounded-md">
           <input
             required
             type={"text"}
@@ -127,9 +127,14 @@ export default function AddEditForm(props: any) {
                   type="text"
                   value={props.subtask}
                   onChange={(e: any) => props.setSubtask(e.target.value)}
+                  class="py-1 px-2 rounded-md"
                 ></input>
-                <button type="button" onClick={() => props.handleAddSubtask()}>
-                  Add Task
+                <button
+                  type="button"
+                  onClick={() => props.handleAddSubtask()}
+                  class="rounded-full border border-white w-6 h-full"
+                >
+                  +
                 </button>
               </div>
             </div>

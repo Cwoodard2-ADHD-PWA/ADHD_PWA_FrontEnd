@@ -4,10 +4,11 @@ import DefaultPage from "../components/layout-components/DefaultPage";
 import TodoListItem from "../components/todo-list-components/TodoListItem";
 import ItemEditForm from "../components/todo-list-components/ItemEditForm";
 import ItemAddForm from "../components/todo-list-components/ItemAddForm";
-import RightSideBar from "../components/todo-list-components/RightSideBar";
+import RightSideBar from "../components/todo-list-components/ListSideBar";
 import GeneralPageWrapper from "../components/layout-components/GeneralPageWrapper";
 
 // TODO: IT'S TIME FOR GLOBAL STATE MANAGEMENT!
+// TODO: Add in DB management
 
 function ToDoList() {
   documentTitle("Todo List");
@@ -53,6 +54,7 @@ function ToDoList() {
 
   const addRef = useRef<HTMLDialogElement | null>(null);
   const editRef = useRef<HTMLDialogElement | null>(null);
+  const addListRef = useRef<HTMLDialogElement | null>(null);
 
   const openEdit = () => {
     if (editRef.current) {
@@ -63,6 +65,18 @@ function ToDoList() {
   const closeEdit = () => {
     if (editRef.current) {
       editRef.current.close();
+    }
+  };
+
+  const openListRef = () => {
+    if (addListRef.current) {
+      addListRef.current.showModal();
+    }
+  };
+
+  const closeListRef = () => {
+    if (addListRef.current) {
+      addListRef.current.close();
     }
   };
 
@@ -103,12 +117,12 @@ function ToDoList() {
   //   setCurrentDate(date.toString().slice(0, 15));
   // }
 
-  function addTask(e: any) {
+  async function addTask(e: any) {
     e.preventDefault();
     console.log(currentTask);
     // TODO: Additionally, add logic that that results in progress being set accordingly to the date it is on
     // TODO: Add logic that ensures no two added tasks are the same / find a better way to uniquely identify tasks
-
+    // TODO: Add logic to handle adding tasks to a DB
     setTodos((prev: any) => [...prev, currentTask]);
     setCurrentTask(defaultTodoList);
     closeAddTask();
@@ -162,6 +176,7 @@ function ToDoList() {
 
   function removeTask(task: string) {
     setTodos((prev) => prev.filter((todo: any) => todo.task !== task));
+    // TODO: Add logic to handle deleting tasks to a DB
     setCurrentTask(defaultTodoList);
     closeEdit();
   }
@@ -176,13 +191,36 @@ function ToDoList() {
     });
   }
 
+  async function changeTodoList(newList: string) {
+    setLoading(true);
+    const response: any = await fetch(
+      `https://localhost:3000/lists/${newList}`,
+    );
+    const listToRetrieve = await response.json();
+    console.log(listToRetrieve);
+    setTodos({
+      task: listToRetrieve.task_name,
+      description: listToRetrieve.description,
+      deadline: listToRetrieve.deadline,
+      time: listToRetrieve.time,
+      complete: listToRetrieve.complete,
+      lists: [],
+      subtasks: [],
+    });
+  }
+
   useEffect(() => {
     async function testDB() {
       var body: any;
+      var listBody: any;
       try {
         const response: any = await fetch("http://localhost:3000/users");
+        // const lists: any = await fetch("https://localhost:3000/lists");
 
         body = await response.json();
+        // listBody = await lists.json();
+        console.log(body);
+        // console.log(listBody);
       } catch (err) {
         console.log(err);
       }
@@ -203,9 +241,9 @@ function ToDoList() {
         );
       } catch (err) {
         console.log(err);
+        setTodos([]);
       } finally {
         console.log("here");
-        setTodos([]);
         setLoading(false);
       }
     }
@@ -326,7 +364,7 @@ function ToDoList() {
             />
           </dialog>
         </GeneralPageWrapper>
-        <RightSideBar />
+        <RightSideBar changeTodoList={changeTodoList} />
       </DefaultPage>
     </>
   );

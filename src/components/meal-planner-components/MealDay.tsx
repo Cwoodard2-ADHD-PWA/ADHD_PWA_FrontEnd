@@ -9,28 +9,28 @@ export default function MealDay() {
           <strong>Breakfast</strong>
         </h4>
         <div class="flex flex-row justify-between">
-          <MealCard />
-          <MealCard />
-          <MealCard />
+          <MealCard recipeName="Noodles" />
+          <MealCard recipeName="Chips" />
+          <MealCard recipeName="Ham" />
         </div>
       </div>
       <div>
         <h4>
           <strong>Lunch</strong>
         </h4>
-        <MealCard />
+        <MealCard recipeName="Eggs" />
       </div>
       <div>
         <h4>
           <strong>Dinner</strong>
         </h4>
-        <MealCard />
+        <MealCard recipeName="Beef" />
       </div>
       <div>
         <h4>
           <strong>Snacks</strong>
         </h4>
-        <MealCard />
+        <MealCard recipeName="Nugs" />
       </div>
     </div>
   );

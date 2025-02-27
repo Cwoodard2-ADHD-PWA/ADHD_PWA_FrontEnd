@@ -25,28 +25,15 @@ export default function MealPlanner() {
 
   let calendar = [];
 
-  for (let i = 0; i < 35; i++) {
-    calendar.push({
-      day: currentDate.getDate(),
-      dayOfWeek: currentDate.getDay(),
-    });
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
+  //   for (let i = 0; i < 35; i++) {
+  //     calendar.push({
+  //       day: currentDate.getDate(),
+  //       dayOfWeek: currentDate.getDay(),
+  //     });
+  //     currentDate.setDate(currentDate.getDate() + 1);
+  //   }
 
   currentDate.setDate(day);
-
-  console.log(calendar);
-  // function createCalendar() {
-  //   let builtCalendar;
-  //   let date = new Date();
-  //   let month = date.getMonth();
-  //   let day = date.getDay();
-  //   let daysInMonth = date.getDate();
-
-  //   for (let i = 1; i <= daysInMonth; i++) {
-
-  //   }
-  // }
 
   return (
     <DefaultPage>
@@ -90,6 +77,7 @@ export default function MealPlanner() {
           <div class="">
             {weekdayConverter(0)}
             <MealDay />
+            <button>Add Meal</button>
           </div>
           <div class="">
             {weekdayConverter(1)}

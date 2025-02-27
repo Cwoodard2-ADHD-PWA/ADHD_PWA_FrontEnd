@@ -1,5 +1,6 @@
 // import { useState } from "preact/hooks";
 // import appLogo from "/favicon.svg";
+import React from "preact/compat";
 import { LocationProvider, Route, Router } from "preact-iso";
 import Homepage from "./pages/home-page.tsx";
 import ToDoList from "./pages/todo-list.tsx";
@@ -20,9 +21,8 @@ export function App() {
         <Route path="/dashboard" component={Homepage} />
         <Route path="/todo-list" component={ToDoList} />
         <Route path="/weekly-planner" component={WeeklyPlanner} />
-        <Route path="/meal-planner" component={MealPlanner}>
-          <Route path=":recipeID" component={ToDoList} />
-        </Route>
+        <Route path="/meal-planner" component={MealPlanner} />
+        <Route path="/recipes/:recipeID" component={Recipe} />
         <Route path="/recipe" component={Recipe} />
         <Route path="/recipes" component={Recipes} />
       </Router>

@@ -10,6 +10,7 @@ import WeeklyPlanner from "./pages/weekly-planner.tsx";
 import MealPlanner from "./pages/meal-planner.tsx";
 import Recipe from "./pages/recipe.tsx";
 import Recipes from "./pages/recipes.tsx";
+import GoalPlanner from "./pages/goal-planner.tsx";
 import "./app.css";
 
 export function App() {
@@ -22,6 +23,7 @@ export function App() {
         <Route path="/todo-list" component={ToDoList} />
         <Route path="/weekly-planner" component={WeeklyPlanner} />
         <Route path="/meal-planner" component={MealPlanner} />
+        <Route path="/goal-planner" component={GoalPlanner} />
         <Route path="/recipes/:recipeID" component={Recipe} />
         <Route path="/recipe" component={Recipe} />
         <Route path="/recipes" component={Recipes} />

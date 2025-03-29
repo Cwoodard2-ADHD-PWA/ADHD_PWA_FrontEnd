@@ -58,7 +58,10 @@ export default function recipe() {
           ) : (
             <div class="flex flex-row justify-between p-4">
               <div>
-                <h2 class="text-2xl">Ingredients</h2>
+                <div>
+                  <h2 class="text-2xl">Ingredients</h2>
+                  <button class="cursor-pointer">Add To Shopping List</button>
+                </div>
                 <div class="flex gap-2">
                   <select onChange={(e: any) => setServings(e.target.value)}>
                     <option>{initialServings * 0.5}</option>

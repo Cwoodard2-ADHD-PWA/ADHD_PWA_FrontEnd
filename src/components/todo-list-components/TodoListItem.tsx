@@ -42,9 +42,10 @@ export default function TodoListItem(props: any) {
       {props.todo.subtasks.length > 0 && (
         <details>
           <summary>Subtasks</summary>
-          <ul>
+          <ul class="flex flex-col gap-4">
             {props.todo.subtasks.map((subtask: any, index: number) => (
-              <li>
+              <li class="flex flex-row">
+                <div class="w-4 h-10 rounded-bl-lg border-l-2 border-b-2 border-green-400"></div>
                 <TodoListSubtask index={index} subtask={subtask} />
               </li>
             ))}

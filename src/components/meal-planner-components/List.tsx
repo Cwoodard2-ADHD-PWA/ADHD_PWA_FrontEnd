@@ -7,22 +7,25 @@ export default function List() {
   const [groceryList, setGroceryList] = useState<string[]>([""]);
   const [input, setInput] = useState<any>("");
 
-  function addToList(item: any) {
-    try {
-      let groceryList: string | null = JSON.parse(
-        localStorage.getItem("grocery-list"),
-      );
-      console.log(groceryList);
-      groceryList.append(item);
-      localStorage.setItem("grocery-list", JSON.stringify(groceryList));
-    } catch (err) {
-      console.log(err);
-    }
+  function addToList(e: any, item: any) {
+    e.preventDefault();
+
+    // try {
+    //   let groceryList: string | null = JSON.parse(
+    //     localStorage.getItem("grocery-list"),
+    //   );
+    //   console.log(groceryList);
+    //   groceryList.append(item);
+    //   localStorage.setItem("grocery-list", JSON.stringify(groceryList));
+    // } catch (err) {
+    //   console.log(err);
+    // }
     setGroceryList((prev: any) => [...prev, item]);
     setInput("");
   }
 
-  function removeFromList(item: any) {
+  function removeFromList(e: any, item: any) {
+    e.preventDefault();
     setGroceryList((prev: any) =>
       prev.filter((ingredient: any) => ingredient != item),
     );
@@ -35,12 +38,12 @@ export default function List() {
           value={input}
           onChange={(e: any) => setInput(e.target.value)}
         ></input>
-        <button onClick={() => addToList(input)}>Add</button>
+        <button onClick={(e) => addToList(e, input)}>Add</button>
       </div>
       <ul>
         {groceryList.map((list, key) => (
           <li key={key}>
-            <button onClick={() => removeFromList(list)}>remove</button>
+            <button onClick={(e) => removeFromList(e, list)}>remove</button>
             {list}
           </li>
         ))}

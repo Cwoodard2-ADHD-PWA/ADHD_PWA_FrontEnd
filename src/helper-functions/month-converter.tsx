@@ -1,45 +1,45 @@
-export default function monthConverter(month: string, day: string): string {
+export default function monthConverter(month: number): string {
   let monthToReturn = "";
   switch (month) {
-    case "01":
+    case 0:
       monthToReturn = "Jan";
       break;
-    case "02":
+    case 1:
       monthToReturn = "Feb";
       break;
-    case "03":
+    case 2:
       monthToReturn = "Mar";
       break;
-    case "04":
+    case 3:
       monthToReturn = "Apr";
       break;
-    case "05":
+    case 4:
       monthToReturn = "May";
       break;
-    case "06":
+    case 5:
       monthToReturn = "June";
       break;
-    case "07":
+    case 6:
       monthToReturn = "July";
       break;
-    case "08":
+    case 7:
       monthToReturn = "Aug";
       break;
-    case "09":
+    case 8:
       monthToReturn = "Sep";
       break;
-    case "10":
+    case 9:
       monthToReturn = "Oct";
       break;
-    case "11":
+    case 10:
       monthToReturn = "Nov";
       break;
-    case "12":
+    case 11:
       monthToReturn = "Dec";
       break;
     default:
       break;
   }
 
-  return monthToReturn + " " + day;
+  return monthToReturn;
 }

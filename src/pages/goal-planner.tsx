@@ -15,6 +15,33 @@ import Calendar from "../components/Calendar";
 export default function GoalPlanner() {
   documentTitle("Goal Planner");
 
+  interface subTaskObject {
+    subtaskName: string;
+    subtaskImage: string;
+  }
+
+  interface goalObject {
+    fullGoal: string;
+    shortGoal: string;
+    deadline: string;
+    subtasks: subTaskObject[];
+  }
+
+  let testGoalList: goalObject[] = [
+    {
+      fullGoal: "This is where a full placeholder for goal 1 would go",
+      shortGoal: "goal 1",
+      deadline: "",
+      subtasks: [{ subtaskName: "goal 1", subtaskImage: "bg-green-400" }],
+    },
+    {
+      fullGoal: "this is where a placeholder for goal 2 would go",
+      shortGoal: "goal2",
+      deadline: "",
+      subtasks: [{ subtaskName: "goal 2", subtaskImage: "bg-purple-400" }],
+    },
+  ];
+
   function showPopup(refToUse: any) {
     console.log("here");
     console.log(refToUse);
@@ -29,9 +56,21 @@ export default function GoalPlanner() {
     }
   }
 
-  let currentDate = new Date();
+  function handleGoalChange(e: any) {
+    setCurrentGoal(testGoalList[e.target.value]);
+  }
+
+  function handleGoalSubmit(goal: goalObject) {
+    console.log(goal);
+    testGoalList.push(goal);
+    console.log(testGoalList);
+    setCurrentGoal(testGoalList[testGoalList.length - 1]);
+  }
+
+  const [currentDate, setCurrentDate] = useState<any>(new Date());
   const [currentDay, setCurrentDay] = useState<number>(currentDate.getDate());
   const [currentWeek, setCurrentWeek] = useState<any>(getCurrentWeek());
+  const [currentGoal, setCurrentGoal] = useState<goalObject>(testGoalList[0]);
   const goalPopupRef = useRef<HTMLDialogElement | null>(null);
   const calendarPopupRef = useRef<HTMLDialogElement | null>(null);
 
@@ -39,21 +78,24 @@ export default function GoalPlanner() {
     <DefaultPage>
       <div class="flex flex-col sm:w-full md:max-h-screen w-max-[800px] items-center gap-3">
         <div class="flex flex-row self-end gap-4 py-4 px-4">
-          <select>
-            <option>First Goal</option>
-            <option>second Goal</option>
+          <select onChange={(e: any) => handleGoalChange(e)}>
+            {testGoalList.map((goal, key) => {
+              return <option value={key}>{goal.shortGoal}</option>;
+            })}
           </select>
           <button onClick={() => showPopup(goalPopupRef)}>+</button>
           <div class="h-10 w-10 bg-purple-300 rounded-full"></div>
         </div>
         <div class="flex flex-row self-start w-full px-10 justify-between items-center">
           <div>
-            <p>{monthConverter(new Date().getMonth())}</p>
-            <p>{new Date().getFullYear()}</p>
+            <p>{monthConverter(currentDate.getMonth())}</p>
+            <p>{currentDate.getFullYear()}</p>
           </div>
           <div class="flex flex-row gap-4">
             <button
-              onClick={() => setCurrentWeek(getPreviousWeek(currentWeek[0]))}
+              onClick={() =>
+                setCurrentWeek(getPreviousWeek(currentDate, setCurrentDate))
+              }
             >
               {"<"}
             </button>
@@ -72,7 +114,11 @@ export default function GoalPlanner() {
                 </div>
               );
             })}
-            <button onClick={() => setCurrentWeek(getNextWeek(currentWeek[0]))}>
+            <button
+              onClick={() =>
+                setCurrentWeek(getNextWeek(currentDate, setCurrentDate))
+              }
+            >
               {">"}
             </button>
           </div>
@@ -81,16 +127,30 @@ export default function GoalPlanner() {
           </button>
         </div>
         <div>
-          <h1 class="text-center">
-            "Placeholder text until it starts getting filled in with goals"
-          </h1>
+          <h1 class="text-center">"{currentGoal.fullGoal}"</h1>
         </div>
-        <div>
-          <div class="w-10 h-10 bg-green-400 rounded-full"></div>
-          <h2>Task</h2>
-        </div>
-        <AddGoalPopup popupRef={goalPopupRef} closeDialog={hidePopup} />
-        <Calendar popupRef={calendarPopupRef} closeDialog={hidePopup} />
+        <ul>
+          {currentGoal.subtasks.map((subtask) => {
+            return (
+              <li>
+                <div
+                  class={`h-10 w-10 rounded-full ${subtask.subtaskImage}`}
+                ></div>
+                <p>{subtask.subtaskName}</p>
+              </li>
+            );
+          })}
+        </ul>
+        <AddGoalPopup
+          popupRef={goalPopupRef}
+          closeDialog={hidePopup}
+          handleGoalSubmit={handleGoalSubmit}
+        />
+        <Calendar
+          popupRef={calendarPopupRef}
+          closeDialog={hidePopup}
+          viewedDate={currentDate}
+        />
       </div>
     </DefaultPage>
   );

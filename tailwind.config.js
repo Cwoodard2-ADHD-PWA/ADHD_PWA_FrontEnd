@@ -22,7 +22,7 @@ export default {
       animation: {
         "left-slide": "slideFromLeft 0.25s linear",
         "bottom-slide": "slideFromBottom 0.25s linear",
-        "fade-in": "fadeIn 3s linear",
+        "fade-in": "fadeIn 1s linear",
       },
     },
   },

@@ -1,14 +1,16 @@
 import { useState, useRef } from "preact/hooks";
 import List from "../meal-planner-components/List";
+import { goalObject, subTaskObject } from "../../interfaces/interfaces";
 
 export default function AddGoalPopup(props: any) {
   const [goalType, setGoalType] = useState("goal");
   const [goalList, setGoalList] = useState([]);
-  const [goalForm, setGoalForm] = useState<any>({
+  const [goalForm, setGoalForm] = useState<goalObject>({
     fullGoal: "",
     shortGoal: "",
     deadline: "",
     subtasks: [{ subtaskName: "", subtaskImage: "" }],
+    checkpoints: [],
   });
   const formRef = useRef<HTMLFormElement | null>(null);
 

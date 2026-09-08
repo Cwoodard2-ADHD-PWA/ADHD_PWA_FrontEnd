@@ -2,11 +2,14 @@ import weekdayConverter from "../helper-functions/weekday-converter";
 export default function Calendar(props: any) {
   let calendar = [];
   let currentDate = new Date(props.viewedDate);
-  currentDate.setDate(1);
-  console.log(currentDate);
   let month = currentDate.getMonth();
   let day = currentDate.getDate();
   let dayOfWeek = currentDate.getDay();
+
+  function switchDay() {}
+
+  currentDate.setDate(1);
+  console.log(currentDate);
 
   currentDate.setDate(currentDate.getDate() - dayOfWeek);
 
